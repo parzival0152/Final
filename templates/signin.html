@@ -3,13 +3,13 @@
 
 {% block head %}
 <title>Index</title>
-<!-- <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}"> -->
+<!-- <script src="{{ url_for('static', filename='scripts/index.js') }}"></script> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/signin.css') }}">
 {% endblock %}
 
 {% block body %}
-<div style="text-align: center;">
-
+<div class="home">
+    <div class="form-wrapper">
     <form action="/signin" method="post" class="form-signin">
         <h2 class="form-signin-heading">
             Please Sign in:
@@ -19,5 +19,6 @@
         {{wtf.form_field(form.password)}}
         {{wtf.form_field(form.rememberme)}}
     </form>
+    </div>
 </div>
 {% endblock %}

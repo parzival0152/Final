@@ -1,0 +1,12 @@
+.home{
+    text-align: center;
+    padding-left: 40%;
+    padding-right: 40%;
+    padding-top: 5%;
+}
+
+.form-wrapper{
+    background-color: lightgray;
+    padding: 5%;
+    border-radius: 25px;
+}
