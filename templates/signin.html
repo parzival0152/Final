@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf%}
+
+{% block head %}
+<title>Index</title>
+<!-- <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}"> -->
+{% endblock %}
+
+{% block body %}
+<div style="text-align: center;">
+
+    <form action="/signin" method="post" class="form-signin">
+        <h2 class="form-signin-heading">
+            Please Sign in:
+        </h2>
+        {{form.hidden_tag()}}
+        {{wtf.form_field(form.username)}}
+        {{wtf.form_field(form.password)}}
+        {{wtf.form_field(form.rememberme)}}
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Index</title>
+<script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="home">
+    <h1>
+        E-sign home page
+    </h1>
+    <p>
+        This is the home page of the E-sign final project made by Ilay Tzuberi and Omri Baron <br>
+        Sign in or Sign up to continue
+    </p>
+</div>
+{% endblock %}
