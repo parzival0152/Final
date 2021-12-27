@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -57,11 +57,14 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/signin")
+@app.route("/signin", methods = ['POST','GET'])
 def signin():
-    form = SigninForm()
+    if request.method == 'POST':
+        return redirect(url_for("index"))
 
-    return render_template("signin.html",form = form)
+    else:
+        form = SigninForm()
+        return render_template("signin.html",form = form)
 
 
 @app.route("/signup")
