@@ -20,7 +20,7 @@ class SigninForm(FlaskForm):
 
 class SignupForm(FlaskForm):
     username = StringField("username", validators=[InputRequired(),Length(min = 4, max= 30)])
-    username = StringField("email", validators=[InputRequired(),Length(min = 4, max= 255),Email(message="invalid email")])
+    email = StringField("email", validators=[InputRequired(),Length(min = 4, max= 255),Email(message="invalid email")])
     password = PasswordField("password", validators=[InputRequired(),Length(min=4,max=50)])
 
 
@@ -32,6 +32,9 @@ class User(db.Model):
     pwd = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     fullName = db.Column(db.String(255))
+
+    def __repr__(self) -> str:
+        return f"Username:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
 
 
 class Template(db.Model):
@@ -56,20 +59,41 @@ class Document(db.Model):
 def index():
     return render_template("index.html")
 
+@app.route("/home")
+def home():
+    return render_template("home.html")
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
     if request.method == 'POST':
-        return redirect(url_for("index"))
+        print(request.form)
+        return redirect(url_for("home"))
 
     else:
         form = SigninForm()
         return render_template("signin.html",form = form)
 
 
-@app.route("/signup")
+@app.route("/signup", methods = ['POST','GET'])
 def signup():
-    return render_template("signup.html")
+    if request.method == 'POST':
+        Uname = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        newuser = User(
+            username = Uname,
+            email = email,
+            pwd = password,
+            fullName = "ya yeet"
+        )
+
+        db.session.add(newuser)
+        db.session.commit()
+        return newuser.__repr__()
+    else:
+        form = SignupForm()
+        return render_template("signup.html",form = form)
 
 
 if __name__ == "__main__":
