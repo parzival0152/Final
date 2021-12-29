@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField
-from wtforms.validators import InputRequired, Length, Email
+from wtforms import StringField, PasswordField, EmailField
+from wtforms.validators import InputRequired, Length
 
 
 
@@ -16,12 +16,12 @@ db = SQLAlchemy(app)
 class SigninForm(FlaskForm):
     username = StringField("username", validators=[InputRequired(),Length(min = 4, max= 30)])
     password = PasswordField("password", validators=[InputRequired(),Length(min=4,max=50)])
-    rememberme = BooleanField("remember me")
 
 class SignupForm(FlaskForm):
-    username = StringField("username", validators=[InputRequired(),Length(min = 4, max= 30)])
-    email = StringField("email", validators=[InputRequired(),Length(min = 4, max= 255),Email(message="invalid email")])
-    password = PasswordField("password", validators=[InputRequired(),Length(min=4,max=50)])
+    username = StringField("Username", validators=[InputRequired(),Length(min = 4, max= 30)])
+    fullname = StringField("Fullname", validators=[InputRequired(),Length(min = 4, max= 255)])
+    email = EmailField("Email", validators=[InputRequired(),Length(min = 4, max= 255)])
+    password = PasswordField("Password", validators=[InputRequired(),Length(min=4,max=50)])
 
 
 
@@ -65,13 +65,14 @@ def home():
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
+    form = SigninForm()
     if request.method == 'POST':
         print(request.form)
-        return redirect(url_for("home"))
+        # return redirect(url_for("home"))
+        return render_template("signin.html",form = form,found = False)
 
     else:
-        form = SigninForm()
-        return render_template("signin.html",form = form)
+        return render_template("signin.html",form = form,found = True)
 
 
 @app.route("/signup", methods = ['POST','GET'])
@@ -80,17 +81,20 @@ def signup():
         Uname = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
+        fullname = request.form.get("fullname")
         
         newuser = User(
             username = Uname,
             email = email,
             pwd = password,
-            fullName = "ya yeet"
+            fullName = fullname
         )
-
         db.session.add(newuser)
         db.session.commit()
-        return newuser.__repr__()
+
+        print(f"commited to database a new user: \n{newuser}\nRedirecting...")
+
+        return redirect(url_for("home"))
     else:
         form = SignupForm()
         return render_template("signup.html",form = form)

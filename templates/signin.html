@@ -2,13 +2,18 @@
 {% import "bootstrap/wtf.html" as wtf%}
 
 {% block head %}
-<title>Index</title>
+<title>Sign-In</title>
 <!-- <script src="{{ url_for('static', filename='scripts/index.js') }}"></script> -->
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/signin.css') }}">
 {% endblock %}
 
 {% block body %}
 <div class="home">
+    {%if not found%}
+    <div class="alert alert-danger" role="alert">
+        This is a danger alert—check it out!
+      </div>
+    {%endif%}
     <div class="form-wrapper">
     <form action="/signin" method="POST" class="form-signin">
         <h2 class="form-signin-heading">
@@ -17,7 +22,6 @@
         {{form.hidden_tag()}}
         {{wtf.form_field(form.username)}}
         {{wtf.form_field(form.password)}}
-        {{wtf.form_field(form.rememberme)}}
         <button type="submit" class="btn btn-primary">Sign-in</button>
     </form>
     </div>
