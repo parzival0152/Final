@@ -8,6 +8,9 @@
 .form-wrapper{
     background-color: lightgray;
     padding: 5%;
+}
+
+.round-corners{
     border-radius: 25px;
 }
 

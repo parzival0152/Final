@@ -10,11 +10,11 @@
 {% block body %}
 <div class="home">
     {%if not found%}
-    <div class="alert alert-danger" role="alert">
-        This is a danger alert—check it out!
+    <div class="alert alert-danger round-corners" role="alert">
+        {{msg}}
       </div>
     {%endif%}
-    <div class="form-wrapper">
+    <div class="form-wrapper round-corners">
     <form action="/signin" method="POST" class="form-signin">
         <h2 class="form-signin-heading">
             Please Sign in:

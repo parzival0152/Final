@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -34,7 +34,7 @@ class User(db.Model):
     fullName = db.Column(db.String(255))
 
     def __repr__(self) -> str:
-        return f"Username:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
+        return f"Uid:{self.Uid}\nUsername:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
 
 
 class Template(db.Model):
@@ -61,18 +61,23 @@ def index():
 
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    return render_template("home.html",name = session['name'])
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
     form = SigninForm()
     if request.method == 'POST':
-        print(request.form)
-        # return redirect(url_for("home"))
-        return render_template("signin.html",form = form,found = False)
-
+        username = request.form.get("username")
+        password = request.form.get("password")
+        signinngIn = User.query.filter_by(username=username,pwd = password).first()
+        if signinngIn is None:
+            return render_template("signin.html",form = form,found = False,msg = f"Username or password incorrect")
+        else:
+            print(signinngIn)
+            session['name'] = signinngIn.fullName
+            return redirect(url_for("home"))
     else:
-        return render_template("signin.html",form = form,found = True)
+        return render_template("signin.html",form = form,found = True,msg = "")
 
 
 @app.route("/signup", methods = ['POST','GET'])
@@ -93,11 +98,21 @@ def signup():
         db.session.commit()
 
         print(f"commited to database a new user: \n{newuser}\nRedirecting...")
+        return redirect(url_for("signin"))
 
-        return redirect(url_for("home"))
     else:
         form = SignupForm()
         return render_template("signup.html",form = form)
+
+@app.route('/signout')
+@app.route('/templates')
+@app.route('/forms')
+def notimplemented():
+    return """
+    <center>
+		<h2>Not Implemented<a href="/">Go back</a></h2>
+	</center>
+    """
 
 
 if __name__ == "__main__":

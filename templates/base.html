@@ -25,10 +25,10 @@
 		  </button>
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-				<li class="nav-item hidden">
+				<li class="nav-item hidden user-only">
 				  <a class="nav-link" href="/templates">My Templates</a>
 				</li>
-				<li class="nav-item hidden">
+				<li class="nav-item hidden user-only">
 				  <a class="nav-link" href="/forms">My Forms</a>
 				</li>
 			</ul>
@@ -38,15 +38,17 @@
 					<i class="material-icons" style="color:White">person</i>
 				</button>
 				<ul class="dropdown-menu " aria-labelledby="dropdownMenuButton1">
-					<li><a class="dropdown-item" href="/signin">Sign-In</a></li>
-					<li><a class="dropdown-item" href="/signup">Sign-Up</a></li>
+					<li><a class="dropdown-item general-only" href="/signin">Sign-In</a></li>
+					<li><a class="dropdown-item general-only" href="/signup">Sign-Up</a></li>
+					<li><a class="dropdown-item hidden user-only" href="/home">Home</a></li>
+					<li><a class="dropdown-item hidden user-only" href="/signout">Signout</a></li>
 				</ul>
 			</div>
 		  </div>
 		</div>
 	  </nav>
 	{% block body %}
-	{% endblock %}
+	{%endblock%}
 </body>
 
 </html>

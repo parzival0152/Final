@@ -14,6 +14,11 @@
 {% block body %}
 <div class="main-content">
     <h1>This is the home page</h1>
-    <div class="msg">Welcome <i>placeholder</i></div>
+    <div class="msg">Welcome <i>{{name}}</i></div>
 </div>
+<script>
+    $(".user-only").toggleClass("hidden");
+    $(".general-only").toggleClass("hidden");
+
+</script>
 {% endblock %}
