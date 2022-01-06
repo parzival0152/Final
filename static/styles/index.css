@@ -1,4 +1,17 @@
 div.home{
     text-align: center;
+    padding-left: 40%;
+    padding-right: 40%;
     padding-top: 5%;
+}
+
+div.card-wrapper{
+    padding: 3% 10% 0px;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div.card{
+    margin:5px;
 }

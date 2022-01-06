@@ -1,3 +1,4 @@
+import json,os
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -41,6 +42,7 @@ class Template(db.Model):
     __tablename__ = "templates"
     Tid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.Text)
     owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
     data = db.Column(db.JSON, nullable=False)
     stats = db.Column(db.JSON, nullable=False)
@@ -61,7 +63,8 @@ def index():
 
 @app.route("/home")
 def home():
-    return render_template("home.html",name = session['name'])
+    docs = Document.query.filter_by(owner=session['Uid']).all()
+    return render_template("home.html",name = session['name'],number = len(docs))
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
@@ -75,6 +78,7 @@ def signin():
         else:
             print(signinngIn)
             session['name'] = signinngIn.fullName
+            session['Uid'] = signinngIn.Uid
             return redirect(url_for("home"))
     else:
         return render_template("signin.html",form = form,found = True,msg = "")
@@ -104,15 +108,69 @@ def signup():
         form = SignupForm()
         return render_template("signup.html",form = form)
 
+@app.route('/Mytemplates')
+def myTemplates():
+    # temps = [(i, f"this is the template #{i}") for i in range(1,11)]
+    temps = Template.query.filter_by(owner = session["Uid"]).all()
+    temps = [{"name":t.name, "description":t.description, "Tid":t.Tid} for t in temps]
+    temps.append({"name":"Create new template", "description":"press here to create a new template", "Tid":0})
+    return render_template("templates.html",templates = temps)
+
+@app.route('/templates/<id>')
+def templates(id):
+    return f"""
+    <center>
+		<h2>Not Implemented <a href="/">Go back</a></h2>
+        <h4>{id}</h4>
+	</center>
+    """
+
+
 @app.route('/signout')
-@app.route('/templates')
 @app.route('/forms')
 def notimplemented():
     return """
     <center>
-		<h2>Not Implemented<a href="/">Go back</a></h2>
+		<h2>Not Implemented <a href="/">Go back</a></h2>
 	</center>
     """
+
+
+@app.route('/purgedatabase')
+def purge():
+    os.remove("test.db")
+    db.create_all()
+    ilay = User(
+        username = "tzuberi",
+        pwd = "123456",
+        email = "ilay.tzu@gmail.com",
+        fullName = "Ilay Tzuberi"
+    )
+    omri = User(
+        username = "obaron",
+        pwd = "123456",
+        email = "obaron4120@gmail.com",
+        fullName = "Omri Baron"
+    )
+    jsonNone = json.dumps(None)
+    tem1 = Template(
+        name = "test template 1",
+        description = "this is some description",
+        owner = 1,
+        data = jsonNone,
+        stats = jsonNone
+    )
+    tem2 = Template(
+        name = "test template 2",
+        description = "this is some description",
+        owner = 2,
+        data = jsonNone,
+        stats = jsonNone
+    )
+
+    db.session.add_all((ilay,omri,tem1,tem2))
+    db.session.commit()
+    return redirect(url_for("index"))
 
 
 if __name__ == "__main__":

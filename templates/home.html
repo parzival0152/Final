@@ -15,10 +15,25 @@
 <div class="main-content">
     <h1>This is the home page</h1>
     <div class="msg">Welcome <i>{{name}}</i></div>
+    <div id="documentmsg"></div>
 </div>
+<span id="number" style="display: none;">{{number}}</span>
 <script>
-    $(".user-only").toggleClass("hidden");
-    $(".general-only").toggleClass("hidden");
+    $(".user-only").removeClass("hidden");
+    $(".general-only").addClass("hidden");
+
+    let num = $("#numebr").text();
+    var msg = ""
+    if(num==0){
+        msg = "You have no pending documents";
+    }
+    else if(num == 1){
+        msg = "You have 1 pending document";
+    }
+    else{
+        msg = "You have "+num+" pending documents";
+    }
+    $("#documentmsg").text(msg);
 
 </script>
 {% endblock %}

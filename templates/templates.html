@@ -2,8 +2,19 @@
 
 {% block head %}
 <title>My Templates</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
 {% endblock %}
 
 {% block body %}
-<h1>this is the templates page</h1>
+<div class="card-wrapper">
+    {%for temp in templates%}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{temp.name}}</h5>
+            <p class="card-text">{{temp.description}}</p>
+            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+        </div>
+    </div>
+    {%endfor%}
+</div>
 {% endblock %}
