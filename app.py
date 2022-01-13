@@ -1,48 +1,14 @@
 import json,os
 from flask import Flask, render_template, request, redirect, session, url_for
-# from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from Models.forms import SigninForm, SignupForm
+from Models.forms import *
 from Models.dataModels import *
 
 app = Flask(__name__)
-# db = SQLAlchemy()
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 app.config["SECRET_KEY"] = "hello"
 Bootstrap(app)
 db.init_app(app)
-
-
-# class User(db.Model):
-#     __tablename__ = "users"
-#     Uid = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(30), nullable=False)
-#     pwd = db.Column(db.String(80), nullable=False)
-#     email = db.Column(db.String(255), nullable=False)
-#     fullName = db.Column(db.String(255))
-
-#     def __repr__(self) -> str:
-#         return f"Uid:{self.Uid}\nUsername:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
-
-
-# class Template(db.Model):
-#     __tablename__ = "templates"
-#     Tid = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(255), nullable=False)
-#     description = db.Column(db.Text)
-#     owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
-#     data = db.Column(db.JSON, nullable=False)
-#     stats = db.Column(db.JSON, nullable=False)
-
-
-# class Document(db.Model):
-#     __tablename__ = "documets"
-#     Did = db.Column(db.Integer, primary_key=True)
-#     data = db.Column(db.JSON, nullable=False)
-#     owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
-#     master = db.Column(db.Integer, db.ForeignKey("templates.Tid"))
-#     stage = db.Column(db.Integer)
-
 
 @app.route("/")
 def index():
@@ -97,7 +63,6 @@ def signup():
 
 @app.route('/Mytemplates')
 def myTemplates():
-    # temps = [(i, f"this is the template #{i}") for i in range(1,11)]
     temps = Template.query.filter_by(owner = session["Uid"]).all()
     temps = [{"name":t.name, "description":t.description, "Tid":t.Tid} for t in temps]
     temps.append({"name":"Create new template", "description":"press here to create a new template", "Tid":0})
