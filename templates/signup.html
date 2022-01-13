@@ -3,13 +3,11 @@
 
 {% block head %}
 <title>Sign-Up</title>
-<!-- <script src="{{ url_for('static', filename='scripts/index.js') }}"></script> -->
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/signup.css') }}">
 {% endblock %}
 
 {% block body %}
 <div class="home">
-    <div class="form-wrapper">
+    <div class="form-wrapper round-corners">
     <form action="/signup" method="POST" class="form-signin">
         <h2 class="form-signin-heading">
             Please Sign up:

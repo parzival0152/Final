@@ -19,21 +19,6 @@
 </div>
 <span id="number" style="display: none;">{{number}}</span>
 <script>
-    $(".user-only").removeClass("hidden");
-    $(".general-only").addClass("hidden");
-
-    let num = $("#numebr").text();
-    var msg = ""
-    if(num==0){
-        msg = "You have no pending documents";
-    }
-    else if(num == 1){
-        msg = "You have 1 pending document";
-    }
-    else{
-        msg = "You have "+num+" pending documents";
-    }
-    $("#documentmsg").text(msg);
-
+user_only()
 </script>
 {% endblock %}

@@ -2,10 +2,10 @@
 
 {% block head %}
 <title>My Templates</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
 {% endblock %}
 
 {% block body %}
+<h2 class="form-header">My Created Templates</h2>
 <div class="card-wrapper">
     {%for temp in templates%}
     <div class="card" style="width: 18rem;">
@@ -17,4 +17,5 @@
     </div>
     {%endfor%}
 </div>
+<script>user_only()</script>
 {% endblock %}

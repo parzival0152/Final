@@ -1,60 +1,47 @@
 import json,os
 from flask import Flask, render_template, request, redirect, session, url_for
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, EmailField
-from wtforms.validators import InputRequired, Length
-
-
+from Models.forms import SigninForm, SignupForm
+from Models.dataModels import *
 
 app = Flask(__name__)
-Bootstrap(app)
+# db = SQLAlchemy()
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
 app.config["SECRET_KEY"] = "hello"
-db = SQLAlchemy(app)
-
-class SigninForm(FlaskForm):
-    username = StringField("username", validators=[InputRequired(),Length(min = 4, max= 30)])
-    password = PasswordField("password", validators=[InputRequired(),Length(min=4,max=50)])
-
-class SignupForm(FlaskForm):
-    username = StringField("Username", validators=[InputRequired(),Length(min = 4, max= 30)])
-    fullname = StringField("Fullname", validators=[InputRequired(),Length(min = 4, max= 255)])
-    email = EmailField("Email", validators=[InputRequired(),Length(min = 4, max= 255)])
-    password = PasswordField("Password", validators=[InputRequired(),Length(min=4,max=50)])
+Bootstrap(app)
+db.init_app(app)
 
 
+# class User(db.Model):
+#     __tablename__ = "users"
+#     Uid = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(30), nullable=False)
+#     pwd = db.Column(db.String(80), nullable=False)
+#     email = db.Column(db.String(255), nullable=False)
+#     fullName = db.Column(db.String(255))
 
-class User(db.Model):
-    __tablename__ = "users"
-    Uid = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(30), nullable=False)
-    pwd = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
-    fullName = db.Column(db.String(255))
-
-    def __repr__(self) -> str:
-        return f"Uid:{self.Uid}\nUsername:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
-
-
-class Template(db.Model):
-    __tablename__ = "templates"
-    Tid = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(255), nullable=False)
-    description = db.Column(db.Text)
-    owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
-    data = db.Column(db.JSON, nullable=False)
-    stats = db.Column(db.JSON, nullable=False)
+#     def __repr__(self) -> str:
+#         return f"Uid:{self.Uid}\nUsername:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
 
 
-class Document(db.Model):
-    __tablename__ = "documets"
-    Did = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.JSON, nullable=False)
-    owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
-    master = db.Column(db.Integer, db.ForeignKey("templates.Tid"))
-    stage = db.Column(db.Integer)
+# class Template(db.Model):
+#     __tablename__ = "templates"
+#     Tid = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(255), nullable=False)
+#     description = db.Column(db.Text)
+#     owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
+#     data = db.Column(db.JSON, nullable=False)
+#     stats = db.Column(db.JSON, nullable=False)
+
+
+# class Document(db.Model):
+#     __tablename__ = "documets"
+#     Did = db.Column(db.Integer, primary_key=True)
+#     data = db.Column(db.JSON, nullable=False)
+#     owner = db.Column(db.Integer, db.ForeignKey("users.Uid"))
+#     master = db.Column(db.Integer, db.ForeignKey("templates.Tid"))
+#     stage = db.Column(db.Integer)
 
 
 @app.route("/")
@@ -116,6 +103,10 @@ def myTemplates():
     temps.append({"name":"Create new template", "description":"press here to create a new template", "Tid":0})
     return render_template("templates.html",templates = temps)
 
+@app.route('/Myforms')
+def myForms():
+    return render_template("forms.html")
+
 @app.route('/templates/<id>')
 def templates(id):
     return f"""
@@ -127,7 +118,6 @@ def templates(id):
 
 
 @app.route('/signout')
-@app.route('/forms')
 def notimplemented():
     return """
     <center>

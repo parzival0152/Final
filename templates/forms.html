@@ -5,6 +5,30 @@
 {% endblock %}
 
 {% block body %}
-<h1>this is the forms page</h1><br>
-{{id}}
+<h2 class="form-header">My Created Forms</h2>
+<div class="card-wrapper">
+    <!-- {%for temp in templates%}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{temp.name}}</h5>
+            <p class="card-text">{{temp.description}}</p>
+            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+        </div>
+    </div>
+    {%endfor%} -->
+</div>
+<hr>
+<h2 class="form-header">Pending Forms</h2>
+<div class="card-wrapper">
+    <!-- {%for temp in templates%}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{temp.name}}</h5>
+            <p class="card-text">{{temp.description}}</p>
+            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+        </div>
+    </div>
+    {%endfor%} -->
+</div>
+<script>user_only()</script>
 {% endblock %}
