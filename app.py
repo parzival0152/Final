@@ -1,23 +1,37 @@
 import json,os
-from flask import Flask, render_template, request, redirect, session, url_for
+from pickle import FALSE
+from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
+from flask_login import login_required, LoginManager, current_user, login_user, logout_user
 from Models.forms import *
 from Models.dataModels import *
 
+jsonNone = json.dumps(None)
+dbfilename = "test.db"
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
+loginmanager = LoginManager()
+
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{dbfilename}"
 app.config["SECRET_KEY"] = "hello"
+
 Bootstrap(app)
 db.init_app(app)
+loginmanager.init_app(app)
+loginmanager.login_view = "signin"
+
+@loginmanager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
 @app.route("/home")
+@login_required
 def home():
-    docs = Document.query.filter_by(owner=session['Uid']).all()
-    return render_template("home.html",name = session['name'],number = len(docs))
+    docs = Document.query.filter_by(owner=current_user.id).all()
+    return render_template("home.html",name = current_user.fullName,number = len(docs))
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
@@ -30,8 +44,7 @@ def signin():
             return render_template("signin.html",form = form,found = False,msg = f"Username or password incorrect")
         else:
             print(signinngIn)
-            session['name'] = signinngIn.fullName
-            session['Uid'] = signinngIn.Uid
+            login_user(signinngIn)
             return redirect(url_for("home"))
     else:
         return render_template("signin.html",form = form,found = True,msg = "")
@@ -53,9 +66,9 @@ def signup():
         )
         db.session.add(newuser)
         db.session.commit()
-
+        login_user(newuser)
         print(f"commited to database a new user: \n{newuser}\nRedirecting...")
-        return redirect(url_for("signin"))
+        return redirect(url_for("home"))
 
     else:
         form = SignupForm()
@@ -63,7 +76,7 @@ def signup():
 
 @app.route('/Mytemplates')
 def myTemplates():
-    temps = Template.query.filter_by(owner = session["Uid"]).all()
+    temps = Template.query.filter_by(owner = current_user.id).all()
     temps = [{"name":t.name, "description":t.description, "Tid":t.Tid} for t in temps]
     temps.append({"name":"Create new template", "description":"press here to create a new template", "Tid":0})
     return render_template("templates.html",templates = temps)
@@ -83,17 +96,14 @@ def templates(id):
 
 
 @app.route('/signout')
-def notimplemented():
-    return """
-    <center>
-		<h2>Not Implemented <a href="/">Go back</a></h2>
-	</center>
-    """
+def signout():
+    logout_user()
+    return redirect(url_for("index"))
 
 
 @app.route('/purgedatabase')
 def purge():
-    os.remove("test.db")
+    os.remove(dbfilename)
     db.create_all()
     ilay = User(
         username = "tzuberi",
@@ -107,7 +117,6 @@ def purge():
         email = "obaron4120@gmail.com",
         fullName = "Omri Baron"
     )
-    jsonNone = json.dumps(None)
     tem1 = Template(
         name = "test template 1",
         description = "this is some description",

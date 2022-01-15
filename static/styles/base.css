@@ -2,6 +2,10 @@
     display: none;
 }
 
+body{
+    background-color: whitesmoke;
+}
+
 .form-wrapper{
     background-color: lightgray;
     padding: 5%;
