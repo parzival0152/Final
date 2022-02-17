@@ -16,6 +16,15 @@ body{
     border-radius: 25px;
 }
 
+.round-btn{
+    border-radius: 50%;
+    padding-bottom: 5%;
+    padding-left: 7%;
+    padding-right: 7%;
+    font-size: larger;
+    text-align: center;
+}
+
 div.home{
     text-align: center;
     padding-left: 32%;
@@ -32,6 +41,7 @@ div.card-wrapper{
 
 div.card{
     margin:5px;
+    text-align: center;
 }
 
 h2.form-header{

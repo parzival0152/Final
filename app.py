@@ -31,6 +31,8 @@ def index():
 @login_required
 def home():
     docs = Document.query.filter_by(owner=current_user.id).all()
+    if not current_user.is_authenticated:
+        return redirect(url_for("index"))
     return render_template("home.html",name = current_user.fullName,number = len(docs))
 
 @app.route("/signin", methods = ['POST','GET'])
@@ -89,7 +91,7 @@ def myForms():
 def templates(id):
     return f"""
     <center>
-		<h2>Not Implemented <a href="/">Go back</a></h2>
+		<h2>Not Implemented <a href="/home">Go back</a></h2>
         <h4>{id}</h4>
 	</center>
     """

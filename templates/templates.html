@@ -12,7 +12,11 @@
         <div class="card-body">
             <h5 class="card-title">{{temp.name}}</h5>
             <p class="card-text">{{temp.description}}</p>
-            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+            {% if temp.name == "Create new template" %}
+                <a href="/templates/{{temp.Tid}}" class="btn btn-primary round-btn"><b>+</b></a>
+            {% else %}
+                <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+            {% endif %}
         </div>
     </div>
     {%endfor%}
