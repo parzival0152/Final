@@ -55,66 +55,87 @@ hr{
 }
 
 .text-cont{
+	margin:10px;
     display: flex;
     flex-direction: column;
     }
   
-  .Inputbox{
-      width: 10%;
-      height: 1.5em;
-      margin-top: 20px;
-    }
-  
-  .Textbox{
-    height: 5em;
-    margin-top: 20px;
-    width: 50%;
-  }
-  
-  /* Dropdown Button */
-  .dropbtn {
-    background-color: #04AA6D;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-  }
-  
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content{
-    display: none;
-    position: absolute;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgb(0,0,0,0.2);
-    z-index: 1;
-  }
-  
-  /* Links inside the dropdown */
-  .dropdown-content a {
-    border: none;
-    display: block;
-  }
-  
-  .optionbtn {
-    border: none;
-    width: 100%;
-    padding: 1.5em;
-    font-size: 15px;
-    color:rgb(0, 0, 0);
-    background-color: #04AA6D;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .optionbtn:hover {background-color: #048858;}
-  
-  /* Show the dropdown menu on hover */
-  .dropdown:hover .dropdown-content {display: block;}
-  
-  /* Change the background color of the dropdown button when the dropdown content is shown */
-  .dropdown:hover .dropbtn {background-color: #048858;}
+.Inputbox{
+	width: 20%;
+	height: 1.5em;
+	margin-top: 20px;
+}
+
+.Textbox{
+	height: 5em;
+	resize: both;
+	margin-top: 20px;
+	max-height: 140px;
+	max-width: 40%;
+	min-width: 30%;
+	min-height: 70px;
+}
+
+
+/* Dropdown Button */
+.dropbtn {
+	position: relative;
+	background-color: #04AA6D;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+	position: absolute;
+	top: 10%;
+	left: 85%;
+	display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content{
+	display: none;
+	position: relative;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgb(0,0,0,0.2);
+	z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	border: none;
+	display: block;
+}
+
+.optionbtn {
+	border: none;
+	width: 100%;
+	padding: 1.5em;
+	font-size: 15px;
+	color:rgb(0, 0, 0);
+	background-color: #04AA6D;
+}
+
+.submitbtn{
+	position: relative;
+  	background-color: #04AA6D;
+  	color: white;
+	padding: 16px;
+	margin: 10px;
+	font-size: 16px;
+	border: none;
+}
+
+/* Change color of dropdown links on hover */
+.optionbtn:hover {background-color: #048858;}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #048858;}
+
+.submitbtn:hover {background-color: #048858;}

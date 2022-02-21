@@ -89,7 +89,15 @@ def myForms():
 
 @app.route('/templates/<id>')
 def templates(id):
-   return render_template("templateMaker.html")
+    if(id=="0"):
+        return render_template("templateMaker.html")
+    else:
+        return f"""
+    <center>
+		<h2>Not Implemented <a href="/home">Go back</a></h2>
+        <h4>{id}</h4>
+	</center>
+    """
 
 
 @app.route('/signout')

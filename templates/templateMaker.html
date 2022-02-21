@@ -5,13 +5,16 @@
 {% endblock %}
 
 {%block body%}
+<div>
     <div class="dropdown">
         <button class="dropbtn">Create new section</button>
         <div class="dropdown-content">
             <a><button class = "optionbtn" onclick="newText()">Add text box</button></a>
-            <a><button class = "optionbtn" onclick="newTextIn()">Add text input</button></a>
+            <a><button class = "optionbtn" onclick="newTextIn()">Add user input</button></a>
         </div>
     </div>
     <div class="text-cont"></div>
     <script src="{{url_for('static', filename='scripts/templates.js') }}"> </script>
+    <footer><button class="submitbtn" onclick="submit()">Create Template</button></footer>
+</div>
 {%endblock%}
