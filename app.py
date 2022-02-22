@@ -1,8 +1,7 @@
 import json,os
-from pickle import FALSE
 from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
-from flask_login import login_required, LoginManager, current_user, login_user, logout_user
+from flask_login import login_required, LoginManager, current_user, login_user, logout_user, user_logged_in
 from Models.forms import *
 from Models.dataModels import *
 
@@ -37,6 +36,10 @@ def home():
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
+
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+
     form = SigninForm()
     if request.method == 'POST':
         username = request.form.get("username")
@@ -54,12 +57,15 @@ def signin():
 
 @app.route("/signup", methods = ['POST','GET'])
 def signup():
+
+    if current_user is not None:
+        return redirect(url_for("home"))
+
     if request.method == 'POST':
         Uname = request.form.get("username")
         email = request.form.get("email")
         password = request.form.get("password")
         fullname = request.form.get("fullname")
-        
         newuser = User(
             username = Uname,
             email = email,
@@ -77,6 +83,7 @@ def signup():
         return render_template("signup.html",form = form)
 
 @app.route('/Mytemplates')
+@login_required
 def myTemplates():
     temps = Template.query.filter_by(owner = current_user.id).all()
     temps = [{"name":t.name, "description":t.description, "Tid":t.Tid} for t in temps]
@@ -84,10 +91,12 @@ def myTemplates():
     return render_template("templates.html",templates = temps)
 
 @app.route('/Myforms')
+@login_required
 def myForms():
     return render_template("forms.html")
 
 @app.route('/templates/<id>')
+@login_required
 def templates(id):
     if(id=="0"):
         return render_template("templateMaker.html")
@@ -100,13 +109,16 @@ def templates(id):
     """
 
 @app.route('/createTemplate',methods = ['POST'])
+@login_required
 def createtemp():
     template = request.form.items()
+    template = {key:value for (key,value) in template}
+    print(template)
     tem1 = Template(
         name = "test template 1",
         description = "this is some description",
-        owner = 2,
-        data = json.dumps({key:value for (key,value) in template}),
+        owner = current_user.id,
+        data = jsonNone,
         stats = jsonNone
     )
     db.session.add(tem1)
@@ -114,8 +126,10 @@ def createtemp():
     return redirect(url_for("home"))
 
 @app.route('/signout')
+@login_required
 def signout():
     logout_user()
+    print(current_user)
     return redirect(url_for("index"))
 
 

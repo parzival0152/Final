@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'userbase.html' %}
 
 {% block head %}
 <title>Homepage</title>
 <style>
-    .main-content{
+    .main-content {
         text-align: center;
         position: relative;
         margin-top: 5%;
@@ -18,7 +18,4 @@
     <div id="documentmsg"></div>
 </div>
 <span id="number" style="display: none;">{{number}}</span>
-<script>
-user_only()
-</script>
 {% endblock %}
