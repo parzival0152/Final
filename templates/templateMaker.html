@@ -9,12 +9,14 @@
     <div class="dropdown">
         <button class="dropbtn">Create new section</button>
         <div class="dropdown-content">
-            <a><button class = "optionbtn" onclick="newText()">Add text box</button></a>
-            <a><button class = "optionbtn" onclick="newTextIn()">Add user input</button></a>
+            <a><button class = "optionbtn" onclick="newText()">Text only section</button></a>
+            <a><button class = "optionbtn" onclick="newTextIn()">Text with input section</button></a>
         </div>
     </div>
-    <div class="text-cont"></div>
-    <script src="{{url_for('static', filename='scripts/templates.js') }}"> </script>
-    <footer><button class="submitbtn" onclick="submit()">Create Template</button></footer>
+    <form id="form" action="/createTemplate" method="POST" class="text-cont">
+        <input type="text" maxlength="100" style="width:33%" placeholder="Document Title" id="title">
+        <button type="submit" id="submit" style="width:200px" class="btn submitbtn">Create Template</button>
+    </form>
+    <script src="{{url_for('static', filename='scripts/templates.js') }}"></script>
 </div>
 {%endblock%}

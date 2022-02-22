@@ -99,6 +99,19 @@ def templates(id):
 	</center>
     """
 
+@app.route('/createTemplate',methods = ['POST'])
+def createtemp():
+    template = request.form.items()
+    tem1 = Template(
+        name = "test template 1",
+        description = "this is some description",
+        owner = 2,
+        data = json.dumps({key:value for (key,value) in template}),
+        stats = jsonNone
+    )
+    db.session.add(tem1)
+    db.session.commit()
+    return redirect(url_for("home"))
 
 @app.route('/signout')
 def signout():
