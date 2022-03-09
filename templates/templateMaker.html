@@ -14,7 +14,8 @@
         </div>
     </div>
     <form id="form" action="/createTemplate" method="POST" class="text-cont">
-        <input type="text" maxlength="100" style="width:33%" placeholder="Document Title" id="title">
+        <input type="text" maxlength="100" style="width:33%" placeholder="Document Title" id="title" name="title">
+        <input type="text" maxlength="100" style="width:33%" placeholder="Document Description" id="description" name="description">
         <button type="submit" id="submit" style="width:200px" class="btn submitbtn">Create Template</button>
     </form>
     <script src="{{url_for('static', filename='scripts/templates.js') }}"></script>

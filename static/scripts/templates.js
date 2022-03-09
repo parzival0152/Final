@@ -6,6 +6,7 @@ const newTextIn = () => {
     textbox.setAttribute("placeholder", "Write your message here");
     textbox.setAttribute("maxlength","2000");
     textbox.setAttribute("id", `${count}`);
+    textbox.setAttribute("name", `text${count}`);
     textbox.classList.add('Textbox');
     form.insertBefore(textbox, button);
     const inbox = document.createElement("input");
@@ -22,6 +23,7 @@ const newTextIn = () => {
     email.setAttribute("placeholder", "User Email");
     email.setAttribute("required", "true");
     email.setAttribute("id", `${count}`);
+    email.setAttribute("name", `email${count}`);
     email.setAttribute("maxlength","30");
     email.classList.add('Inputbox');
     count++;
@@ -32,6 +34,7 @@ const newText = () => {
     textbox.setAttribute("placeholder", "Write your message here");
     textbox.setAttribute("maxlength","2000");
     textbox.setAttribute("id", `${count}`);
+    textbox.setAttribute("name", `textbox${count}`);
     textbox.classList.add('Textbox');
     count++;
     form.insertBefore(textbox, button);

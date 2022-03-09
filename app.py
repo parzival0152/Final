@@ -24,6 +24,8 @@ def load_user(user_id):
 
 @app.route("/")
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     return render_template("index.html")
 
 @app.route("/home")
@@ -111,14 +113,11 @@ def templates(id):
 @app.route('/createTemplate',methods = ['POST'])
 @login_required
 def createtemp():
-    template = request.form.items()
-    template = {key:value for (key,value) in template}
-    print(template)
     tem1 = Template(
-        name = "test template 1",
-        description = "this is some description",
+        name = request.form.get("title"),
+        description = request.form.get("description"),
         owner = current_user.id,
-        data = jsonNone,
+        data = json.dumps(request.form.to_dict()),
         stats = jsonNone
     )
     db.session.add(tem1)
