@@ -6,12 +6,8 @@
 
 {%block body%}
 <div>
-    <div class="dropdown">
-        <button class="dropbtn">Create new section</button>
-        <div class="dropdown-content">
-            <a><button class = "optionbtn" onclick="newText()">Text only section</button></a>
-            <a><button class = "optionbtn" onclick="newTextIn()">Text with input section</button></a>
-        </div>
+    <div class="top-left">
+        <button class="btn submitbtn" onclick="newStation()">Create Station</button>
     </div>
     <form id="form" action="/createTemplate" method="POST" class="text-cont">
         <input type="text" maxlength="100" style="width:33%" placeholder="Document Title" id="title" name="title">
