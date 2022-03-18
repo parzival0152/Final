@@ -3,13 +3,6 @@ const form = document.getElementById("form");
 let count = 1;
 let stCount = 1;
 const newIn = () => {
-    // const textbox = document.createElement("textarea");
-    // textbox.setAttribute("placeholder", "Write your message here");
-    // textbox.setAttribute("maxlength","2000");
-    // textbox.setAttribute("id", `${count}`);
-    // textbox.setAttribute("name", `text${count}`);
-    // textbox.classList.add('Textbox');
-    // form.insertBefore(textbox, button);
     const inbox = document.createElement("input");
     inbox.setAttribute("type", "text");
     inbox.setAttribute("placeholder", "User input");
@@ -54,6 +47,7 @@ const newStation = () => {
 
     const createSecBtn = document.createElement("button");
     createSecBtn.setAttribute("id", `sectionbtn${stCount}`);
+    createSecBtn.setAttribute("type","button");
     createSecBtn.innerHTML = "Create new section";
     createSecBtn.setAttribute("name", `sectionbtn${stCount}`);
     createSecBtn.classList.add('dropbtn');
@@ -66,6 +60,7 @@ const newStation = () => {
 
     const createTxt = document.createElement("button");
     createTxt.setAttribute("id", `createTxt${stCount}`);
+    createTxt.setAttribute("type","button");
     createTxt.innerHTML = "Add text section";
     createTxt.setAttribute("name", `createTxt${stCount}`);
     createTxt.setAttribute("onclick", "newText()");
@@ -74,7 +69,8 @@ const newStation = () => {
 
     const createIn = document.createElement("button");
     createIn.setAttribute("id", `createIn${stCount}`);
-    createIn.innerHTML = "Add text section";
+    createIn.setAttribute("type","button");
+    createIn.innerHTML = "Add input section";
     createIn.setAttribute("name", `createIn${stCount}`);
     createIn.setAttribute("onclick", "newIn()");
     createIn.classList.add('optionbtn');

@@ -9,9 +9,9 @@
     <div class="top-left">
         <button class="btn submitbtn" onclick="newStation()">Create Station</button>
     </div>
-    <form id="form" action="/createTemplate" method="POST" class="text-cont">
-        <input type="text" maxlength="100" style="width:33%" placeholder="Document Title" id="title" name="title">
-        <input type="text" maxlength="100" style="width:33%" placeholder="Document Description" id="description" name="description">
+    <form id="form" style="border-top: 10%;" action="/createTemplate" method="POST" class="text-cont">
+        <input type="text" maxlength="100" style="margin-bottom: 5px; width:33%",border="25%",margin="35%" placeholder="Document Title" id="title" name="title">
+        <input type="text" maxlength="100" style="margin-top: 5px; margin-bottom: 5px; width:33%" placeholder="Document Description" id="description" name="description">
         <button type="submit" id="submit" style="width:200px" class="btn submitbtn">Create Template</button>
     </form>
     <script src="{{url_for('static', filename='scripts/templates.js') }}"></script>
