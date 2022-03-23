@@ -1,0 +1,18 @@
+.StationWrapper{
+    display: block;
+    margin: 1em;
+    padding: 1em;
+    border: 0.4rem solid rgb(1, 27, 2);
+    border-radius: 0.5em;
+}
+
+.Red_insert{
+    background-color: red;
+}
+
+div.form-floating{
+    width: 33%;
+    height: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}

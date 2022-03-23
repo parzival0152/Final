@@ -1,80 +1,57 @@
-const button = document.getElementById("submit");
-const form = document.getElementById("form");
-let count = 1;
-let stCount = 1;
-const newIn = () => {
-    const inbox = document.createElement("input");
-    inbox.setAttribute("type", "text");
-    inbox.setAttribute("placeholder", "User input");
-    inbox.setAttribute("id", `${count}`);
-    inbox.setAttribute("readonly","true");
-    inbox.setAttribute("maxlength","30");
-    inbox.classList.add('Inputbox');
-    form.insertBefore(inbox, button);
-    count++;
-    const email = document.createElement("input");
-    email.setAttribute("type", "email");
-    email.setAttribute("placeholder", "User Email");
-    email.setAttribute("required", "true");
-    email.setAttribute("id", `${count}`);
-    email.setAttribute("name", `email${count}`);
-    email.setAttribute("maxlength","30");
-    email.classList.add('Inputbox');
-    count++;
-    form.append(email, button);
-}
-const newText = () => {
-    const textbox = document.createElement("textarea");
-    textbox.setAttribute("placeholder", "Write your message here");
-    textbox.setAttribute("maxlength","2000");
-    textbox.setAttribute("id", `${count}`);
-    textbox.setAttribute("name", `textbox${count}`);
-    textbox.classList.add('Textbox');
-    count++;
-    form.insertBefore(textbox, button);
-}
+/// <reference path="jquery-3.6.0.js" />
+/// <reference path="inputCreator.js" />
 
-const newStation = () => {
-    const newSt = document.createElement("div");
-    newSt.setAttribute("id", `${stCount}`);
-    newSt.setAttribute("name", `section${stCount}`);
-    form.insertBefore(newSt, button);
+const form = $("#form");
+let stationCount = 0;
+let count = 0;
+$("#StationHeadButton").on("click", function () {
+    $("#StationBody").slideToggle(150);
+});
 
-    const dropdwn = document.createElement("div");
-    newSt.setAttribute("name", `drpdiv${stCount}`);
-    dropdwn.classList.add("dropdown");
-    newSt.appendChild(dropdwn);
 
-    const createSecBtn = document.createElement("button");
-    createSecBtn.setAttribute("id", `sectionbtn${stCount}`);
-    createSecBtn.setAttribute("type","button");
-    createSecBtn.innerHTML = "Create new section";
-    createSecBtn.setAttribute("name", `sectionbtn${stCount}`);
-    createSecBtn.classList.add('dropbtn');
-    dropdwn.appendChild(createSecBtn);
+$("#station_maker").on("click", () => {
+    // Code to create a station goes here
+    let StationWrapper = $("<div></div>").addClass("StationWrapper");
+    let contentDiv = $("<div></div>").attr("id", `station${stationCount}`).addClass("StationContent");
 
-    const drpcont = document.createElement("div");
-    newSt.setAttribute("name", `drpcont${stCount}`);
-    drpcont.classList.add('dropdown-content');
-    dropdwn.appendChild(drpcont);
+    let nameLabel = $("<label></label>")
+        .addClass("StationLabel")
+        .attr("for", `Station${stationCount}_Name`)
+        .text("Enter a name for the station");
 
-    const createTxt = document.createElement("button");
-    createTxt.setAttribute("id", `createTxt${stCount}`);
-    createTxt.setAttribute("type","button");
-    createTxt.innerHTML = "Add text section";
-    createTxt.setAttribute("name", `createTxt${stCount}`);
-    createTxt.setAttribute("onclick", "newText()");
-    createTxt.classList.add('optionbtn');
-    drpcont.appendChild(createTxt);
+    let nameInput = $("<input></input>").attr({
+        class: "form-control",
+        name: `Station${stationCount}_Name`,
+        type: "text",
+        placeholder: "skdjfg",
+        "autocomplete": "off"
+    });
 
-    const createIn = document.createElement("button");
-    createIn.setAttribute("id", `createIn${stCount}`);
-    createIn.setAttribute("type","button");
-    createIn.innerHTML = "Add input section";
-    createIn.setAttribute("name", `createIn${stCount}`);
-    createIn.setAttribute("onclick", "newIn()");
-    createIn.classList.add('optionbtn');
-    drpcont.appendChild(createIn);
+    let emailLabel = $("<label></label>").addClass("StationLabel")
+        .attr("for", `Station${stationCount}_Email`)
+        .text("Enter an email for the station");
 
-    stCount++;
-}
+    let emailInput = $("<input></input>").attr({
+        class: "form-control",
+        name: `Station${stationCount}_Email`,
+        type: "email",
+        placeholder: "skdjfg",
+        "autocomplete": "off"
+    });
+
+
+    let nameDiv = $("<div></div>").addClass("form-floating").append(nameInput, nameLabel);
+    let emailDiv = $("<div></div>").addClass("form-floating").append(emailInput, emailLabel);
+
+    let inC = new inputCreator(contentDiv, stationCount);
+
+    StationWrapper.append($("<div></div>").text(`This is Station #${stationCount}`),
+        nameDiv, emailDiv, contentDiv,
+        $("<button></button>").text("Create a text field").on("click", () => { inC.CreateTextField() }).attr("type", "button"),
+        $("<button></button>").text("Create a user-input field").on("click", () => { inC.CreateInputField() }).attr("type", "button")
+    );
+
+    form.append(StationWrapper);
+    stationCount++;
+});
+

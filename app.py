@@ -4,6 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user, user_logged_in
 from Models.forms import *
 from Models.dataModels import *
+from Models.functions import *
 
 jsonNone = json.dumps(None)
 dbfilename = "test.db"
@@ -105,7 +106,7 @@ def templates(id):
     else:
         return f"""
     <center>
-		<h2>Not Implemented <a href="/home">Go back</a></h2>
+		<h2>Not Implemented <a href="/Mytemplates">Go back</a></h2>
         <h4>{id}</h4>
 	</center>
     """
@@ -117,7 +118,7 @@ def createtemp():
         name = request.form.get("title"),
         description = request.form.get("description"),
         owner = current_user.id,
-        data = json.dumps(request.form.to_dict()),
+        data = parse_response(request.form.to_dict()),
         stats = jsonNone
     )
     db.session.add(tem1)

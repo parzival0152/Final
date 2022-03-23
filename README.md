@@ -22,3 +22,13 @@
     4. Run ```pip install -r requirements.txt``` to install all the dependent python libraries.
     5. To close the venv use ```deactivate```.
 4. To run the app use ```python app.py``` and go to ```localhost:5000``` to find the home page.
+---
+# Template format:
+
+A template is a json object that contains a name, a description and a list of stations.
+A station is a json object that contains a name, a recipients email (later multiple) and a list of fields.
+
+# Fields:
+There are a few types of fields:
+Text: these fields are rendered as just a block of text on the template
+Input: these fields area rendered as and input space and in the template maker they get their prompt
