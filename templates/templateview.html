@@ -1,0 +1,51 @@
+{% extends 'userbase.html' %}
+
+{% block head %}
+<title>Template viewer</title>
+<style>
+    .main-content {
+        text-align: center;
+        position: relative;
+        margin-top: 2%;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="main-content">
+    <h1>{{data["title"]}}</h1>
+    <h4>{{data["description"]}}</h4>
+    {% for station in data["stations"] %}
+    {% set StationIndex = loop.index %}
+    <div class="StationWrapper">
+        <div class="StationHead">
+            <button type="button" id="StationHeadButton{{StationIndex}}"> {{station["Name"]}}</button>
+            {{station["Email"]}}
+        </div>
+        <div class="StationBody" id="StationBody{{StationIndex}}">
+            {% for field in station["fields"] %}
+                {% if field["type"] == "text" %}
+                <p class="text">{{field["value"]}}</p> 
+                {% elif field["type"] == "input" %}
+                 <div class="form-floating">
+                    <input type="text" maxlength="100" placeholder="Template Title" name="Station{{StationIndex}}_input{{loop.index}}" class="form-control" disabled>
+                    <label for="title">{{field["prompt"]}}</label>
+                </div> 
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    <button class="btn" type="button"><a href="/CreateDocument/{{id}}">Instanciate this Template as your own document</a></button>
+    
+</div>
+<script>
+    let stationCount = $(".StationWrapper").length;
+    for (let index = 1; index < stationCount+1; index++) {
+        $(`#StationHeadButton${index}`).on("click", () => {
+            $(`#StationBody${index}`).slideToggle(150);
+        });
+    }
+
+</script>
+{% endblock %}

@@ -4,9 +4,6 @@
 const form = $("#form");
 let stationCount = 0;
 let count = 0;
-$("#StationHeadButton").on("click", function () {
-    $("#StationBody").slideToggle(150);
-});
 
 
 $("#station_maker").on("click", () => {
@@ -25,7 +22,7 @@ $("#station_maker").on("click", () => {
         type: "text",
         placeholder: "skdjfg",
         "autocomplete": "off"
-    });
+    }).prop("required",true);
 
     let emailLabel = $("<label></label>").addClass("StationLabel")
         .attr("for", `Station${stationCount}_Email`)
@@ -37,7 +34,7 @@ $("#station_maker").on("click", () => {
         type: "email",
         placeholder: "skdjfg",
         "autocomplete": "off"
-    });
+    }).prop("required",true);
 
 
     let nameDiv = $("<div></div>").addClass("form-floating").append(nameInput, nameLabel);

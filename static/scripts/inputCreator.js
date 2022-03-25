@@ -14,8 +14,9 @@ class inputCreator {
             name: name,
             type: "text",
             placeholder: "skdjfg",
-            "autocomplete": "off"
-        });
+            "autocomplete": "off",
+            "required": "true"
+        }).prop("required",true);
         let label = $("<label></label>")
             .addClass("InputLabel")
             .attr("for", name)
@@ -31,8 +32,8 @@ class inputCreator {
         let input = $("<textarea></textarea>").addClass("form-control").attr({
             name: name,
             placeholder: "skdjfg",
-            "autocomplete": "off"
-        });
+            "autocomplete": "off",
+        }).prop("required",true);
         let label = $("<label></label>")
             .addClass("InputLabel")
             .attr("for", name)

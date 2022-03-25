@@ -104,12 +104,8 @@ def templates(id):
     if(id=="0"):
         return render_template("templateMaker.html")
     else:
-        return f"""
-    <center>
-		<h2>Not Implemented <a href="/Mytemplates">Go back</a></h2>
-        <h4>{id}</h4>
-	</center>
-    """
+        data = json.loads(Template.query.get(id).data)
+        return render_template("templateview.html",data = data,id = id)
 
 @app.route('/createTemplate',methods = ['POST'])
 @login_required
@@ -125,11 +121,15 @@ def createtemp():
     db.session.commit()
     return redirect(url_for("home"))
 
+@app.route('/CreateDocument/<id>')
+@login_required
+def createdocument(id):
+    return "well, shit"
+
 @app.route('/signout')
 @login_required
 def signout():
     logout_user()
-    print(current_user)
     return redirect(url_for("index"))
 
 

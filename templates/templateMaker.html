@@ -13,23 +13,15 @@
     </div>
     <form id="form" style="border-top: 10%;" action="/createTemplate" method="POST" class="text-cont">
         <div class="form-floating">
-            <input type="text" maxlength="100" placeholder="Template Title" name="title" class="form-control">
+            <input type="text" maxlength="100" placeholder="Template Title" name="title" class="form-control" required>
             <label for="title">Template Title</label>
         </div>
         <div class="form-floating">
-            <input type="text" maxlength="100" placeholder="vbhmn" name="description" class="form-control">
+            <input type="text" maxlength="100" placeholder="vbhmn" name="description" class="form-control" required>
             <label for="description">Template Description</label>
         </div>
     </form>
     <button type="submit" id="submit" style="width:200px" class="btn submitbtn" form="form">Create Template</button>
-    <!-- <div class="StationWrapper">
-        <div class="StationHead">
-            <button type="button" id="StationHeadButton"> this will collapse the body</button>
-        </div>
-        <div class="StationBody" id="StationBody">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-    </div> -->
 </div>
 
 <script src="{{url_for('static', filename='scripts/templates.js') }}"></script>
