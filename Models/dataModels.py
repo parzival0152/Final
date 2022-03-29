@@ -3,7 +3,8 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-class User(db.Model,UserMixin):
+
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False)
@@ -26,7 +27,7 @@ class Template(db.Model):
 
 
 class Document(db.Model):
-    __tablename__ = "documets"
+    __tablename__ = "documents"
     Did = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.JSON, nullable=False)
     owner = db.Column(db.Integer, db.ForeignKey("users.id"))

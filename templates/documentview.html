@@ -1,7 +1,7 @@
 {% extends 'userbase.html' %}
 
 {% block head %}
-<title>Template viewer</title>
+<title>Document viewer</title>
 <style>
     .main-content {
         text-align: center;
@@ -38,10 +38,6 @@
         </div>
     </div>
     {% endfor %}
-    <button class="btn" type="button"><a href="/CreateDocument/{{id}}">Instanciate this Template as your own document</a></button><br>
-    {% if viewstats %}
-    {{stats}}
-    {% endif %}
 </div>
 <script>
     let stationCount = $(".StationWrapper").length;

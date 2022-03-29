@@ -7,15 +7,15 @@
 {% block body %}
 <h2 class="form-header">My Created Forms</h2>
 <div class="card-wrapper">
-    <!-- {%for temp in templates%}
+    {%for temp in MyDocuments%}
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">{{temp.name}}</h5>
             <p class="card-text">{{temp.description}}</p>
-            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a>
         </div>
     </div>
-    {%endfor%} -->
+    {%endfor%}
 </div>
 <hr>
 <h2 class="form-header">Pending Forms</h2>

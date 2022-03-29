@@ -32,5 +32,8 @@ def parse_response(form_response):
         "description":description,
         "stations":stations
     }
-    return json.dumps(template)
+    stats = {str(index):0 for index in range(len(stations))}
+    stats["created"] = 0
+    stats["completed"] = 0
+    return json.dumps(template),json.dumps(stats)
     

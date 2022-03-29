@@ -1,7 +1,7 @@
 import json,os
 from flask import Flask, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
-from flask_login import login_required, LoginManager, current_user, login_user, logout_user, user_logged_in
+from flask_login import login_required, LoginManager, current_user, login_user, logout_user
 from Models.forms import *
 from Models.dataModels import *
 from Models.functions import *
@@ -57,11 +57,10 @@ def signin():
     else:
         return render_template("signin.html",form = form,found = True,msg = "")
 
-
 @app.route("/signup", methods = ['POST','GET'])
 def signup():
 
-    if current_user is not None:
+    if current_user.is_authenticated:
         return redirect(url_for("home"))
 
     if request.method == 'POST':
@@ -96,7 +95,9 @@ def myTemplates():
 @app.route('/Myforms')
 @login_required
 def myForms():
-    return render_template("forms.html")
+    docs = Document.query.filter_by(owner = current_user.id).all()
+    docs = [{"name":t.Did, "description":t.owner, "Did":t.Did} for t in docs]
+    return render_template("forms.html", MyDocuments = docs)
 
 @app.route('/templates/<id>')
 @login_required
@@ -104,18 +105,28 @@ def templates(id):
     if(id=="0"):
         return render_template("templateMaker.html")
     else:
-        data = json.loads(Template.query.get(id).data)
-        return render_template("templateview.html",data = data,id = id)
+        template = Template.query.get(id)
+        data = json.loads(template.data)
+        stats = json.loads(template.stats)
+        return render_template("templateview.html",data = data,id = id,stats = stats,viewstats = template.owner==current_user.id)
+
+@app.route('/documents/<id>')
+@login_required
+def documents(id):
+    document = Document.query.get(id)
+    data = json.loads(document.data)
+    return render_template("documentview.html",data = data,id = id)
 
 @app.route('/createTemplate',methods = ['POST'])
 @login_required
 def createtemp():
+    data,stats = parse_response(request.form.to_dict())
     tem1 = Template(
         name = request.form.get("title"),
         description = request.form.get("description"),
         owner = current_user.id,
-        data = parse_response(request.form.to_dict()),
-        stats = jsonNone
+        data = data,
+        stats = stats
     )
     db.session.add(tem1)
     db.session.commit()
@@ -124,7 +135,20 @@ def createtemp():
 @app.route('/CreateDocument/<id>')
 @login_required
 def createdocument(id):
-    return "well, shit"
+    template = Template.query.get(id)
+    stats = json.loads(template.stats)
+    stats["created"] += 1
+    stats["0"] += 1
+    template.stats = json.dumps(stats)
+    newDoc = Document(
+        data = template.data,
+        owner = current_user.id,
+        master = template.Tid,
+        stage = 0
+    )
+    db.session.add(newDoc)
+    db.session.commit()
+    return redirect(url_for("documents",id=newDoc.Did))
 
 @app.route('/signout')
 @login_required
