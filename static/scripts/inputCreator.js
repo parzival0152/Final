@@ -14,6 +14,7 @@ class inputCreator {
             name: name,
             type: "text",
             placeholder: "skdjfg",
+            border:"15px",
             "autocomplete": "off",
             "required": "true"
         }).prop("required",true);
@@ -31,6 +32,7 @@ class inputCreator {
         let name = `Station${this.stationId}_text${this.count}`;
         let input = $("<textarea></textarea>").addClass("form-control").attr({
             name: name,
+            border:"30%",
             placeholder: "skdjfg",
             "autocomplete": "off",
         }).prop("required",true);
