@@ -59,22 +59,6 @@ hr{
     display: flex;
     flex-direction: column;
     }
-  
-.Inputbox{
-	width: 20%;
-	height: 1.5em;
-	margin-top: 20px;
-}
-
-.Textbox{
-	height: 5em;
-	resize: both;
-	margin-top: 20px;
-	max-height: 140px;
-	max-width: 40%;
-	min-width: 30%;
-	min-height: 70px;
-}
 
 /* Dropdown Button */
 .dropbtn {
