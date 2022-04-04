@@ -18,7 +18,7 @@
     <h1>{{data["title"]}}</h1>
     <h4>{{data["description"]}}</h4>
     {% for station in data["stations"] %}
-    {% set StationIndex = loop.index %}
+    {% set StationIndex = loop.index0 %}
     <div class="StationWrapper">
         <div class="StationHead">
             <button type="button" id="StationHeadButton{{StationIndex}}"> {{station["Name"]}}</button>
@@ -43,13 +43,5 @@
     {{stats}}
     {% endif %}
 </div>
-<script>
-    let stationCount = $(".StationWrapper").length;
-    for (let index = 1; index < stationCount+1; index++) {
-        $(`#StationHeadButton${index}`).on("click", () => {
-            $(`#StationBody${index}`).slideToggle(150);
-        });
-    }
-
-</script>
+<script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
 {% endblock %}

@@ -20,7 +20,8 @@ def parse_response(form_response):
             elif "input" in identifier:
                 fieldList.append({
                     "type":"input",
-                    "prompt":value
+                    "prompt":value,
+                    "value":"",
                 })
         stations.append({
             "Name":name,

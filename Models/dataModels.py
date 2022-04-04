@@ -12,9 +12,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False)
     fullName = db.Column(db.String(255))
 
-    def __repr__(self) -> str:
-        return f"Uid:{self.id}\nUsername:{self.username}\nemail:{self.email}\npassword:{self.pwd}\nFullname:{self.fullName}"
-
 
 class Template(db.Model):
     __tablename__ = "templates"
@@ -33,3 +30,4 @@ class Document(db.Model):
     owner = db.Column(db.Integer, db.ForeignKey("users.id"))
     master = db.Column(db.Integer, db.ForeignKey("templates.Tid"))
     stage = db.Column(db.Integer)
+    currentemail = db.Column(db.String(255))

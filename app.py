@@ -32,10 +32,10 @@ def index():
 @app.route("/home")
 @login_required
 def home():
-    docs = Document.query.filter_by(owner=current_user.id).all()
+    #docs = Document.query.filter_by(owner=current_user.id).all()
     if not current_user.is_authenticated:
         return redirect(url_for("index"))
-    return render_template("home.html",name = current_user.fullName,number = len(docs))
+    return render_template("home.html",name = current_user.fullName,number = 0)#len(docs))
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
@@ -110,12 +110,15 @@ def templates(id):
         stats = json.loads(template.stats)
         return render_template("templateview.html",data = data,id = id,stats = stats,viewstats = template.owner==current_user.id)
 
-@app.route('/documents/<id>')
+@app.route('/documents/<id>', methods = ['POST','GET'])
 @login_required
 def documents(id):
-    document = Document.query.get(id)
-    data = json.loads(document.data)
-    return render_template("documentview.html",data = data,id = id)
+    if request.method == "GET":
+        document = Document.query.get(id)
+        data = json.loads(document.data)
+        return render_template("documentview.html",data = data,stage = document.stage)
+    else:
+        pass
 
 @app.route('/createTemplate',methods = ['POST'])
 @login_required
@@ -144,7 +147,8 @@ def createdocument(id):
         data = template.data,
         owner = current_user.id,
         master = template.Tid,
-        stage = 0
+        stage = 0,
+        currentemail = current_user.email
     )
     db.session.add(newDoc)
     db.session.commit()
@@ -173,22 +177,26 @@ def purge():
         email = "obaron4120@gmail.com",
         fullName = "Omri Baron"
     )
-    tem1 = Template(
-        name = "test template 1",
-        description = "this is some description",
-        owner = 1,
-        data = jsonNone,
-        stats = jsonNone
+    a = User(
+        username = "aaaa",
+        pwd = "123456",
+        email = "a@a.com",
+        fullName = "Test User A"
     )
-    tem2 = Template(
-        name = "test template 2",
-        description = "this is some description",
-        owner = 2,
-        data = jsonNone,
-        stats = jsonNone
+    b = User(
+        username = "bbbb",
+        pwd = "123456",
+        email = "b@b.com",
+        fullName = "Test User B"
+    )
+    c = User(
+        username = "cccc",
+        pwd = "123456",
+        email = "c@c.com",
+        fullName = "Test User C"
     )
 
-    db.session.add_all((ilay,omri,tem1,tem2))
+    db.session.add_all((ilay,omri,a,b,c))
     db.session.commit()
     return redirect(url_for("index"))
 

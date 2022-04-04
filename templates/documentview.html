@@ -18,7 +18,7 @@
     <h1>{{data["title"]}}</h1>
     <h4>{{data["description"]}}</h4>
     {% for station in data["stations"] %}
-    {% set StationIndex = loop.index %}
+    {% set StationIndex = loop.index0 %}
     <div class="StationWrapper">
         <div class="StationHead">
             <button type="button" id="StationHeadButton{{StationIndex}}"> {{station["Name"]}}</button>
@@ -30,7 +30,7 @@
                 <p class="text">{{field["value"]}}</p> 
                 {% elif field["type"] == "input" %}
                  <div class="form-floating">
-                    <input type="text" maxlength="100" placeholder="Template Title" name="Station{{StationIndex}}_input{{loop.index}}" class="form-control" disabled>
+                    <input type="text" maxlength="100" placeholder="Template Title" name="Station{{StationIndex}}_input{{loop.index}}" class="form-control" value="{{field['value']}}" disabled>
                     <label for="title">{{field["prompt"]}}</label>
                 </div> 
                 {% endif %}
@@ -39,13 +39,7 @@
     </div>
     {% endfor %}
 </div>
-<script>
-    let stationCount = $(".StationWrapper").length;
-    for (let index = 1; index < stationCount+1; index++) {
-        $(`#StationHeadButton${index}`).on("click", () => {
-            $(`#StationBody${index}`).slideToggle(150);
-        });
-    }
-
-</script>
+<span style="display: none;" id="stage">{{stage}}</span>
+<script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
+<script src="{{url_for('static', filename='scripts/documentAliver.js') }}"></script>
 {% endblock %}
