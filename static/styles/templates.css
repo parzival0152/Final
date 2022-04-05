@@ -1,4 +1,4 @@
-.StationWrapper{
+.StationWrapper {
     display: block;
     overflow: hidden;
     margin: 1em;
@@ -7,9 +7,19 @@
     border-radius: 0.5em;
 }
 
-div.form-floating{
+div.form-floating {
     width: 33%;
     height: 2em;
     margin-top: 5px;
     margin-bottom: 2em;
+}
+
+table,
+th,
+td {
+    border: 1px solid;
+}
+
+table {
+    border-collapse: collapse;
 }

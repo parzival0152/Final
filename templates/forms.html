@@ -16,18 +16,26 @@
         </div>
     </div>
     {%endfor%}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Create Document</h5>
+            <p class="card-text">Create a document from the templates created by other users</p>
+            <a href="/documents/-1" class="btn btn-primary">view document</a>
+        </div>
+    </div>
 </div>
 <hr>
 <h2 class="form-header">Pending Forms</h2>
 <div class="card-wrapper">
-    <!-- {%for temp in templates%}
+    {%for temp in pendingDocuments%}
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">{{temp.name}}</h5>
             <p class="card-text">{{temp.description}}</p>
-            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a>
         </div>
     </div>
-    {%endfor%} -->
+    {%endfor%}
+    
 </div>
 {% endblock %}

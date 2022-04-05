@@ -36,9 +36,13 @@ $("#station_maker").on("click", () => {
         "autocomplete": "off"
     }).prop("required",true);
 
-
     let nameDiv = $("<div></div>").addClass("form-floating").append(nameInput, nameLabel);
     let emailDiv = $("<div></div>").addClass("form-floating").append(emailInput, emailLabel);
+
+    if (stationCount == 0){
+        emailInput.prop("required",false);
+        emailDiv.hide();
+    }
 
     let inC = new inputCreator(contentDiv, stationCount);
 

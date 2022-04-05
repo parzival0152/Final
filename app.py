@@ -95,9 +95,11 @@ def myTemplates():
 @app.route('/Myforms')
 @login_required
 def myForms():
-    docs = Document.query.filter_by(owner = current_user.id).all()
-    docs = [{"name":t.Did, "description":t.owner, "Did":t.Did} for t in docs]
-    return render_template("forms.html", MyDocuments = docs)
+    mydocs = Document.query.filter_by(owner = current_user.id).all()
+    mydocs = [{"name":t.Did, "description":t.owner, "Did":t.Did} for t in mydocs]
+    pendingdocs = Document.query.filter_by(currentemail = current_user.email).all()
+    pendingdocs = [{"name":t.Did, "description":t.owner, "Did":t.Did} for t in pendingdocs]
+    return render_template("forms.html", MyDocuments = mydocs, pendingDocuments = pendingdocs)
 
 @app.route('/templates/<id>')
 @login_required
@@ -116,9 +118,37 @@ def documents(id):
     if request.method == "GET":
         document = Document.query.get(id)
         data = json.loads(document.data)
-        return render_template("documentview.html",data = data,stage = document.stage)
+        return render_template("documentview.html",data = data,stage = document.stage, allowed = document.currentemail == current_user.email)
     else:
-        pass
+        document = Document.query.get(id)
+        data = json.loads(document.data)
+        formdata = request.form.to_dict()
+        stage = int(formdata.pop("stage"))
+        stationdata = data["stations"][stage]["fields"]
+        for index,value in formdata.items():
+            stationdata[int(index)]["value"] = value
+        data["stations"][stage]["fields"] = stationdata
+        document.data = json.dumps(data)
+        document.stage += 1
+        nextemail = ""
+        completed = False
+        try:
+            nextemail = data["stations"][stage+1]["Email"]
+        except IndexError:
+            completed = True
+        document.currentemail = nextemail
+
+        origintemplate = Template.query.get(document.master)
+        stats = json.loads(origintemplate.stats)
+        stats[str(stage)] -= 1
+        if not completed:
+            stats[str(stage+1)] += 1
+        else:
+            stats["completed"]+=1
+
+        origintemplate.stats = json.dumps(stats)
+        db.session.commit()
+        return redirect(url_for("myForms"))
 
 @app.route('/createTemplate',methods = ['POST'])
 @login_required
@@ -143,8 +173,10 @@ def createdocument(id):
     stats["created"] += 1
     stats["0"] += 1
     template.stats = json.dumps(stats)
+    data = json.loads(template.data)
+    data["stations"][0]["Email"] = current_user.email
     newDoc = Document(
-        data = template.data,
+        data = json.dumps(data),
         owner = current_user.id,
         master = template.Tid,
         stage = 0,

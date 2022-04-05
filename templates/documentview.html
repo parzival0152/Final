@@ -15,6 +15,7 @@
 
 {% block body %}
 <div class="main-content">
+    <form action="" method="post">
     <h1>{{data["title"]}}</h1>
     <h4>{{data["description"]}}</h4>
     {% for station in data["stations"] %}
@@ -28,9 +29,9 @@
             {% for field in station["fields"] %}
                 {% if field["type"] == "text" %}
                 <p class="text">{{field["value"]}}</p> 
-                {% elif field["type"] == "input" %}
+                {% elif  "input" in field["type"] %}
                  <div class="form-floating">
-                    <input type="text" maxlength="100" placeholder="Template Title" name="Station{{StationIndex}}_input{{loop.index}}" class="form-control" value="{{field['value']}}" disabled>
+                    <input type="text" maxlength="100" placeholder="Template Title" name="{{loop.index0}}" class="form-control" value="{{field['value']}}" disabled>
                     <label for="title">{{field["prompt"]}}</label>
                 </div> 
                 {% endif %}
@@ -38,8 +39,10 @@
         </div>
     </div>
     {% endfor %}
+    <input style="display: none;" id="stage" name="stage" value="{{stage}}">
+</form>
 </div>
-<span style="display: none;" id="stage">{{stage}}</span>
+<span id="allowed" style="display: none;">{{allowed}}</span>
 <script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
 <script src="{{url_for('static', filename='scripts/documentAliver.js') }}"></script>
 {% endblock %}

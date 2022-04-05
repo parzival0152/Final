@@ -39,9 +39,16 @@
     </div>
     {% endfor %}
     <button class="btn" type="button"><a href="/CreateDocument/{{id}}">Instanciate this Template as your own document</a></button><br>
-    {% if viewstats %}
-    {{stats}}
-    {% endif %}
+    <table class="statstable">
+        {% if viewstats %}
+        {% for key, value in stats.items() %}
+        <tr>
+            <th>{{key}}</th>
+            <td>{{value}}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
 </div>
 <script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
 {% endblock %}
