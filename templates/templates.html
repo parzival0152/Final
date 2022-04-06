@@ -5,7 +5,13 @@
 {% endblock %}
 
 {% block body %}
-<h2 class="form-header">My Created Templates</h2>
+<h2 class="form-header">
+    {% if mode == "all" %}
+    Created Templates
+    {% else %}
+    My Created Templates
+    {% endif %}
+</h2>
 <div class="card-wrapper">
     {%for temp in templates%}
     <div class="card" style="width: 18rem;">
@@ -13,9 +19,9 @@
             <h5 class="card-title">{{temp.name}}</h5>
             <p class="card-text">{{temp.description}}</p>
             {% if temp.name == "Create new template" %}
-                <a href="/templates/{{temp.Tid}}" class="btn btn-primary round-btn"><b>+</b></a>
+            <a href="/templates/{{temp.Tid}}" class="btn btn-primary round-btn"><b>+</b></a>
             {% else %}
-                <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
             {% endif %}
         </div>
     </div>

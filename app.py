@@ -88,9 +88,12 @@ def signup():
 @login_required
 def myTemplates():
     temps = Template.query.filter_by(owner = current_user.id).all()
+    mode = request.args.get("mode", default="none")
+    if mode == "all":
+        temps = Template.query.all()
     temps = [{"name":t.name, "description":t.description, "Tid":t.Tid} for t in temps]
     temps.append({"name":"Create new template", "description":"press here to create a new template", "Tid":0})
-    return render_template("templates.html",templates = temps)
+    return render_template("templates.html",templates = temps, mode = mode)
 
 @app.route('/Myforms')
 @login_required
@@ -124,28 +127,33 @@ def documents(id):
         data = json.loads(document.data)
         formdata = request.form.to_dict()
         stage = int(formdata.pop("stage"))
+        choice = formdata.pop("choice")
+
         stationdata = data["stations"][stage]["fields"]
         for index,value in formdata.items():
             stationdata[int(index)]["value"] = value
         data["stations"][stage]["fields"] = stationdata
-        document.data = json.dumps(data)
-        document.stage += 1
         nextemail = ""
         completed = False
         try:
             nextemail = data["stations"][stage+1]["Email"]
         except IndexError:
             completed = True
-        document.currentemail = nextemail
 
         origintemplate = Template.query.get(document.master)
         stats = json.loads(origintemplate.stats)
         stats[str(stage)] -= 1
         if not completed:
             stats[str(stage+1)] += 1
-        else:
+        elif choice == "Approve":
             stats["completed"]+=1
+        else:
+            stats["failed"]+=1
+            nextemail = ""
 
+        document.data = json.dumps(data)
+        document.stage += 1
+        document.currentemail = nextemail
         origintemplate.stats = json.dumps(stats)
         db.session.commit()
         return redirect(url_for("myForms"))
