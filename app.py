@@ -1,5 +1,5 @@
 import json,os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user
 from Models.forms import *
@@ -203,6 +203,19 @@ def signout():
     logout_user()
     return redirect(url_for("index"))
 
+@app.route('/api/users')
+def api_users():
+    users = [{"id":user[0],
+               "name":user[1],
+               "email":user[2]}
+        for user in User.query.with_entities(User.id,User.fullName,User.email).all()]
+    return jsonify(users)
+
+@app.route('/api/docs_count/<user_id>')
+def api_count_of_docs_for_user(user_id):
+    user_email = User.query.get(user_id).email
+    docs = Document.query.filter(Document.currentemail==user_email).count()
+    return jsonify({"count":docs})
 
 @app.route('/purgedatabase')
 def purge():
