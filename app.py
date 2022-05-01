@@ -143,13 +143,16 @@ def documents(id):
         origintemplate = Template.query.get(document.master)
         stats = json.loads(origintemplate.stats)
         stats[str(stage)] -= 1
-        if not completed:
-            stats[str(stage+1)] += 1
-        elif choice == "Approve":
-            stats["completed"]+=1
-        else:
+        
+        if choice == "Deny":
             stats["failed"]+=1
             nextemail = ""
+        else:
+            if completed:
+                stats["completed"]+=1
+            else:
+                stats[str(stage+1)] += 1
+            
 
         document.data = json.dumps(data)
         document.stage += 1
