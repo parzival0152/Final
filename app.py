@@ -2,11 +2,14 @@ import json,os
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user
-from Models.forms import *
-from Models.dataModels import *
-from Models.functions import *
+from Models.forms import SigninForm,SignupForm
+from Models.dataModels import db,User,Template,Document
+from Models.functions import parse_response
 
 jsonNone = json.dumps(None)
+default_preferances = json.dumps({
+    "alert time":"1700"
+})
 dbfilename = "test.db"
 app = Flask(__name__)
 loginmanager = LoginManager()
@@ -205,10 +208,11 @@ def signout():
 
 @app.route('/api/users')
 def api_users():
-    users = [{"id":user[0],
-               "name":user[1],
-               "email":user[2]}
-        for user in User.query.with_entities(User.id,User.fullName,User.email).all()]
+    users = [{"id":id,
+               "name":name,
+               "email":email,
+               "preferances":json.loads(preferances)}
+        for (id,name,email,preferances) in User.query.with_entities(User.id,User.fullName,User.email,User.preferances).all()]
     return jsonify(users)
 
 @app.route('/api/docs_count/<user_id>')
@@ -225,31 +229,36 @@ def purge():
         username = "tzuberi",
         pwd = "123456",
         email = "ilay.tzu@gmail.com",
-        fullName = "Ilay Tzuberi"
+        fullName = "Ilay Tzuberi",
+        preferances = default_preferances
     )
     omri = User(
         username = "obaron",
         pwd = "123456",
         email = "obaron4120@gmail.com",
-        fullName = "Omri Baron"
+        fullName = "Omri Baron",
+        preferances = default_preferances
     )
     a = User(
         username = "aaaa",
         pwd = "123456",
         email = "a@a.com",
-        fullName = "Test User A"
+        fullName = "Test User A",
+        preferances = default_preferances
     )
     b = User(
         username = "bbbb",
         pwd = "123456",
         email = "b@b.com",
-        fullName = "Test User B"
+        fullName = "Test User B",
+        preferances = default_preferances
     )
     c = User(
         username = "cccc",
         pwd = "123456",
         email = "c@c.com",
-        fullName = "Test User C"
+        fullName = "Test User C",
+        preferances = default_preferances
     )
 
     db.session.add_all((ilay,omri,a,b,c))

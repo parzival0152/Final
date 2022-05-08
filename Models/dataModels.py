@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     pwd = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     fullName = db.Column(db.String(255))
+    preferances = db.Column(db.JSON, nullable=False)
 
 
 class Template(db.Model):
