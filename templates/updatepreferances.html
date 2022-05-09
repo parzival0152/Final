@@ -1,0 +1,17 @@
+{% extends 'userbase.html' %}
+
+{% block head %}
+<title>Update Preferances</title>
+{% endblock %}
+
+{%block body%}
+<div class="form-wrapper round-corners">
+    <div class="form-floating">
+        <input type="time" maxlength="100" placeholder="17:00" name="alert_time" class="form-control" value="17:00" disabled>
+        <label for="alert time">Alert time</label>
+        <button type="button" name="alert_time_button"><i class="material-icons" style="color:White">edit</i></button>
+    </div>
+</div>
+
+<script src="{{url_for('static', filename='scripts/preferances.js') }}"></script>
+{%endblock%}

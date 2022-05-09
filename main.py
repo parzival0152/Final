@@ -1,13 +1,9 @@
 from app import app
-from time import sleep
+from emailschedualer import Email_Schedualer
 from threading import Thread
 
-def runtest():
-    while True:
-        sleep(5)
-        print("i have awoken\ni will now go back to sleep")
+es = Email_Schedualer()
 
-
-testapp = Thread(target=runtest)
+testapp = Thread(target=es.run)
 testapp.start()
 app.run(debug=True)

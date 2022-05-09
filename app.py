@@ -8,13 +8,14 @@ from Models.functions import parse_response
 
 jsonNone = json.dumps(None)
 default_preferances = json.dumps({
-    "alert time":"1700"
+    "alert_time":"17:00"
 })
 dbfilename = "test.db"
 app = Flask(__name__)
 loginmanager = LoginManager()
 
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{dbfilename}"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = "hello"
 
 Bootstrap(app)
@@ -39,6 +40,11 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for("index"))
     return render_template("home.html",name = current_user.fullName,number = 0)#len(docs))
+
+@app.route("/updatepreferances")
+@login_required
+def updatepreferances():
+    return render_template("updatepreferances.html")
 
 @app.route("/signin", methods = ['POST','GET'])
 def signin():

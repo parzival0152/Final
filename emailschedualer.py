@@ -1,62 +1,64 @@
-from threading import Timer
+import schedule
 from time import sleep
 from requests import get
 
-class RepeatedTimer(object):
-    def __init__(self, interval, function, *args, **kwargs):
-        self._timer     = None
-        self.interval   = interval
-        self.function   = function
-        self.args       = args
-        self.kwargs     = kwargs
-        self.is_running = False
-        self.start()
 
-    def _run(self):
-        self.is_running = False
-        self.start()
-        self.function(*self.args, **self.kwargs)
+class user:
+    def __init__(self, **kwargs) -> None:
+        self.id = kwargs["id"]
+        self.name = kwargs["name"]
+        self.email = kwargs["email"]
+        self.prefered_time = kwargs["preferances"]["alert_time"] # save info from user list
+        self.set_timer()
 
-    def start(self):
-        if not self.is_running:
-            self._timer = Timer(self.interval, self._run)
-            self._timer.start()
-            self.is_running = True
+    def set_timer(self, time=None) -> None:
+        if time:
+            schedule.cancel_job(self.emailer)
+            self.prefered_time = time
+        self.emailer = schedule.every().day.at(self.prefered_time).do(self.send_email)
 
-    def stop(self):
-        self._timer.cancel()
-        self.is_running = False
-
-class Email_Schedualer:
-    def __init__(self) -> None:
-        sleep(10) # give the flask aplication time to boot up before making a request to the api of the aplication
-        self.get_users() # get list of user information from the server
-
-
-    def get_users(self) ->None:
+    def send_email(self) -> None:
         try:
-            r = get("http://127.0.0.1:5000/api/users") # make request to the server
-            if r.status_code == 200:
-                users = r.json()
-        except ConnectionError: # if there was a connection error just give up and try again
-            pass
-
-    def send_email(self,user) -> None:
-        try:
-            r = get(f"http://127.0.0.1:5000/api/docs_count/{user.id}")
+            r = get(f"http://127.0.0.1:5000/api/docs_count/{self.id}")
             if r.status_code == 200:
                 count = r.json()["count"]
                 msg = ""
                 if count == 0:
-                    msg = f"Hello {user.name} \nYou currently have no pending documents"
+                    msg = f"Hello {self.name} \nYou currently have no pending documents"
                 else:
-                    msg = f"Hello {user.name} \nYou have {count} pending document{'s' if count>1 else ''}"
-                
-                #TODO: send the msg to user.email
+                    msg = f"Hello {self.name} \nYou have {count} pending document{'s' if count>1 else ''}"
 
+                # TODO: send the msg to user.email
         except ConnectionError:
             pass
 
 
-
+class Email_Schedualer:
+    def get_users(self):
+        try:
+            r = get("http://127.0.0.1:5000/api/users")  # make request to the server
+            if r.status_code == 200:
+                return r.json()
+        except ConnectionError:  # if there was a connection error just give up and try again
+            return []
     
+    def update_users(self):
+        updated_info = self.get_users() #get updated user info
+        for n,o in zip(updated_info,self.userlist): # run over the pairs of users
+            assert n["id"] == o.id # users should be alligned, if not this will raise an error
+            if not n["preferances"]["alert_time"] == o.prefered_time: # if the prefered time has been changed
+                o.set_timer(n["preferances"]["alert_time"]) # update the timer
+
+    def run(self) -> None:
+        sleep(5)  # give the flask aplication time to boot up before making a request to the api of the aplication
+        print("here we go bois")
+        userlist = self.get_users()  # get list of user information from the server
+        self.userlist = [user(**u) for u in userlist] # create user handler list
+        schedule.every(1).hours.do(self.update_users) # set update time for checking updated information
+        while 1:
+            schedule.run_pending() # keep excecuting email updates
+            sleep(5)
+
+
+if __name__ == "__main__":
+    Es = Email_Schedualer()
