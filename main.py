@@ -1,5 +1,5 @@
 from app import app
-from emailschedualer import Email_Schedualer
+from EmailSubsystem.emailschedualer import Email_Schedualer
 from threading import Thread
 
 es = Email_Schedualer()

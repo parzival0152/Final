@@ -28,6 +28,7 @@ pathspec==0.9.0
 platformdirs==2.4.0
 pylint==2.12.2
 requests==2.27.1
+schedule==1.1.0
 six==1.16.0
 SQLAlchemy==1.4.28
 toml==0.10.2
