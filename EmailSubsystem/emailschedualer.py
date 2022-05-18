@@ -1,6 +1,7 @@
 import schedule
 from time import sleep
 from requests import get
+from requests.exceptions import ConnectionError
 from EmailSubsystem.EmailSender import send_email
 
 
@@ -26,7 +27,7 @@ class user:
                 msg = ""
                 if count > 0:
                     msg = f"Hello {self.name} \nYou have {count} pending document{'s' if count>1 else ''}"
-                send_email(self.email,msg)
+                    send_email(self.email,msg)
         except ConnectionError:
             pass
 
@@ -36,6 +37,7 @@ class Email_Schedualer:
         try:
             r = get("http://127.0.0.1:5000/api/users")  # make request to the server
             if r.status_code == 200:
+                print(r.json())
                 return r.json()
         except ConnectionError:  # if there was a connection error just give up and try again
             return []
@@ -62,3 +64,4 @@ class Email_Schedualer:
 
 if __name__ == "__main__":
     Es = Email_Schedualer()
+    Es.run()

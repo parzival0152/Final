@@ -27,6 +27,26 @@ class inputCreator {
         this.count++;
     };
 
+    CreateImageField = () => {
+        let div = $("<div></div>").addClass("form-floating");
+        let name = `Station${this.stationId}_image${this.count}`;
+        let input = $("<input></input>").addClass("form-control").attr({
+            name: name,
+            type: "text",
+            placeholder: "skdjfg",
+            border:"15px",
+            "autocomplete": "off",
+            "required": "true"
+        }).prop("required",true);
+        let label = $("<label></label>")
+            .addClass("InputLabel")
+            .attr("for", name)
+            .text("Enter the prompt for the input");
+        div.append(input,label)
+        this.targetdiv.append(div);
+        this.count++;
+    };
+
     CreateTextField = () => {
         let div = $("<div></div>").addClass("form-floating");
         let name = `Station${this.stationId}_text${this.count}`;

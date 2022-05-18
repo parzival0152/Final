@@ -10,6 +10,7 @@
 {%endblock%}
 
 {% block dropdowncontent %}
-<li><a class="dropdown-item" href="/home">Home</a></li>
-<li><a class="dropdown-item" href="/signout">Signout</a></li>
+<li><a class="dropdown-item" href="{{url_for('home')}}">Home</a></li>
+<li><a class="dropdown-item" href="{{url_for('preferances')}}">Preferances</a></li>
+<li><a class="dropdown-item" href="{{url_for('signout')}}">Signout</a></li>
 {%endblock%}

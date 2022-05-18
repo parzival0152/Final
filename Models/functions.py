@@ -21,7 +21,12 @@ def parse_response(form_response):
                 fieldList.append({
                     "type":"input",
                     "prompt":value,
-                    "value":"",
+                    "value":""
+                })
+            elif "image" in identifier:
+                fieldList.append({
+                    "type":"image",
+                    "value":value
                 })
         stations.append({
             "Name":name,

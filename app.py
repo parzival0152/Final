@@ -8,7 +8,7 @@ from Models.functions import parse_response
 
 jsonNone = json.dumps(None)
 default_preferances = json.dumps({
-    "alert_time":"18:49"
+    "alert_time":"19:40"
 })
 dbfilename = "test.db"
 app = Flask(__name__)
@@ -41,13 +41,17 @@ def home():
         return redirect(url_for("index"))
     return render_template("home.html",name = current_user.fullName,number = 0)#len(docs))
 
-@app.route("/updatepreferances", methods = ['POST','GET'])
+@app.route("/preferances", methods = ['POST','GET'])
 @login_required
-def updatepreferances():
+def preferances():
     if request.method == 'GET':
-        print(json.loads(current_user.preferances))
-        return render_template("updatepreferances.html",preferances = json.loads(current_user.preferances))
+        return render_template("preferances.html",preferances = json.loads(current_user.preferances))
     else:
+        current_preferances = json.loads(current_user.preferances)
+        for key,value in request.form.items():
+            current_preferances[key] = value
+        current_user.preferances = json.dumps(current_preferances)
+        db.session.commit()
         return redirect(url_for("home"))
 
 @app.route("/signin", methods = ['POST','GET'])
