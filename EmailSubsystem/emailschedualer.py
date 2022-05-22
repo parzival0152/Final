@@ -37,28 +37,28 @@ class Email_Schedualer:
         try:
             r = get("http://127.0.0.1:5000/api/users")  # make request to the server
             if r.status_code == 200:
-                print(r.json())
                 return r.json()
+            else:
+                print(r.status_code)
         except ConnectionError:  # if there was a connection error just give up and try again
             return []
     
     def update_users(self):
         print("updating info")
         updated_info = self.get_users() #get updated user info
-        for n,o in zip(updated_info,self.userlist): # run over the pairs of users
-            assert n["id"] == o.id # users should be alligned, if not this will raise an error
-            if not n["preferances"]["alert_time"] == o.prefered_time: # if the prefered time has been changed
-                o.set_timer(n["preferances"]["alert_time"]) # update the timer
+        for new_user_info in updated_info: # run over the new data
+            specified_user = self.userlist[new_user_info['id']] # grab the specific user using his id
+            if not new_user_info["preferances"]["alert_time"] == specified_user.prefered_time: # if the prefered time has been changed
+                specified_user.set_timer(new_user_info["preferances"]["alert_time"]) # update the timer
 
     def run(self) -> None:
-        sleep(5)  # give the flask aplication time to boot up before making a request to the api of the aplication
-        print("here we go bois")
+        print("Starting EmailSchedualer system")
         userlist = self.get_users()  # get list of user information from the server
-        self.userlist = [user(**u) for u in userlist] # create user handler list
-        schedule.every(1).minutes.do(self.update_users) # set update time for checking updated information
+        self.userlist = {u["id"]:user(**u) for u in userlist} # create user handler dict with the keys being the user id
+        schedule.every().minute.at(":00").do(self.update_users) # set update time for checking updated information
         while 1:
             schedule.run_pending() # keep excecuting email updates
-            print("sending emails if they exist")
+            print("Excecuting tasks")
             sleep(60)
 
 

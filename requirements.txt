@@ -27,6 +27,7 @@ mypy-extensions==0.4.3
 pathspec==0.9.0
 platformdirs==2.4.0
 pylint==2.12.2
+python-dotenv==0.20.0
 requests==2.27.1
 schedule==1.1.0
 six==1.16.0

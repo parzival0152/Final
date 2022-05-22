@@ -1,10 +1,14 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from os import environ
+from dotenv import load_dotenv
+
+load_dotenv()
 
 #The mail addresses and password
-SENDER_ADDRESS = 'ilay.tzu@gmail.com'
-SENDER_PASS = 'gcyyaigaiiubncxi'
+SENDER_ADDRESS = environ['SENDER_ADDRESS']
+SENDER_PASS = environ['SENDER_PASS']
 
 def send_email(receiver_address:str , msg:str) -> None:
     #Setup the MIME

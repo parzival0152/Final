@@ -6,6 +6,7 @@ db = SQLAlchemy()
 
 class User(db.Model, UserMixin):
     __tablename__ = "users"
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False)
     pwd = db.Column(db.String(80), nullable=False)
@@ -16,6 +17,7 @@ class User(db.Model, UserMixin):
 
 class Template(db.Model):
     __tablename__ = "templates"
+
     Tid = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
@@ -26,6 +28,7 @@ class Template(db.Model):
 
 class Document(db.Model):
     __tablename__ = "documents"
+    
     Did = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.JSON, nullable=False)
     owner = db.Column(db.Integer, db.ForeignKey("users.id"))

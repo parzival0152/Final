@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user
 from Models.forms import SigninForm,SignupForm
 from Models.dataModels import db,User,Template,Document
-from Models.functions import parse_response
+from Models.functions import parse_response,complition_email_send
 
 jsonNone = json.dumps(None)
 default_preferances = json.dumps({
@@ -89,7 +89,8 @@ def signup():
             username = Uname,
             email = email,
             pwd = password,
-            fullName = fullname
+            fullName = fullname,
+            preferances = default_preferances
         )
         db.session.add(newuser)
         db.session.commit()
@@ -167,6 +168,8 @@ def documents(id):
         else:
             if completed:
                 stats["completed"]+=1
+                originatorEmail = data["stations"][0]["Email"]
+                complition_email_send(User.query.filter_by(email = originatorEmail).first())
             else:
                 stats[str(stage+1)] += 1
             
