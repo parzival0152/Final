@@ -1,20 +1,26 @@
-import json,os
+import json
+from os import environ
+from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user
+
 from Models.forms import SigninForm,SignupForm
 from Models.dataModels import db,User,Template,Document
 from Models.functions import parse_response,complition_email_send
+
+load_dotenv()
 
 jsonNone = json.dumps(None)
 default_preferances = json.dumps({
     "alert_time":"19:40"
 })
-dbfilename = "test.db"
+
+DBFILENAME = environ['DBFILENAME']
 app = Flask(__name__)
 loginmanager = LoginManager()
 
-app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{dbfilename}"
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DBFILENAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = "hello"
 
@@ -240,7 +246,8 @@ def api_count_of_docs_for_user(user_id):
 
 @app.route('/purgedatabase')
 def purge():
-    os.remove(dbfilename)
+    # os.remove(dbfilename)
+    db.drop_all()
     db.create_all()
     ilay = User(
         username = "tzuberi",
