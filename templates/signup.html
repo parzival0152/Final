@@ -7,6 +7,11 @@
 
 {% block body %}
 <div class="home">
+    {%if err%}
+    <div class="alert alert-danger round-corners" role="alert">
+        {{msg}}
+      </div>
+    {%endif%}
     <div class="form-wrapper round-corners">
     <form action="/signup" method="POST" class="form-signin">
         <h2 class="form-signin-heading">

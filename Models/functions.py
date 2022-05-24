@@ -1,7 +1,6 @@
 from itertools import groupby
 import json
 from EmailSubsystem.EmailSender import send_email
-from Models.dataModels import User
 
 def parse_response(form_response):
     title = form_response.pop("title")
@@ -46,8 +45,8 @@ def parse_response(form_response):
     stats["failed"] = 0
     return json.dumps(template),json.dumps(stats)
     
-def complition_email_send(user:User) -> None:
-    username = user.fullName
+def complition_email_send(user) -> None:
+    username = user.fullname
     email = user.email
     msg = f'''
         Hello {username}, a document that you have created has been completed.\n
