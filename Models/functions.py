@@ -2,7 +2,7 @@ from itertools import groupby
 import json
 from EmailSubsystem.EmailSender import send_email
 
-def parse_response(form_response):
+def parse_response(form_response): # magic
     title = form_response.pop("title")
     description = form_response.pop("description")
     form_response = list(form_response.items())

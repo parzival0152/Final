@@ -18,13 +18,16 @@
         <div class="card-body">
             <h5 class="card-title">{{temp.name}}</h5>
             <p class="card-text">{{temp.description}}</p>
-            {% if temp.name == "Create new template" %}
-            <a href="/templates/{{temp.Tid}}" class="btn btn-primary round-btn"><b>+</b></a>
-            {% else %}
             <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
-            {% endif %}
         </div>
     </div>
     {%endfor%}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Create new template</h5>
+            <p class="card-text">press here to create a new template</p>
+            <a href="/templates/0" class="btn btn-primary round-btn">+</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

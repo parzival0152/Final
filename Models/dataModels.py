@@ -1,9 +1,7 @@
 import json
 from typing import Iterator, Tuple
-
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-
 from Models.functions import parse_response
 
 db = SQLAlchemy()
@@ -22,8 +20,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     preferances = db.Column(db.JSON, nullable=False)
 
-    created_templates = db.relationship("Template")
-    created_documents = db.relationship("Document")
+    created_templates = db.relationship("Template",back_populates="owner")
+    created_documents = db.relationship("Document",back_populates="owner")
 
     def __init__(self,username,fullname,email,password) -> None:
         self.username = username
@@ -57,7 +55,7 @@ class Template(db.Model):
     data = db.Column(db.JSON, nullable=False)
     stats = db.Column(db.JSON, nullable=False)
 
-    owner = db.relationship("User")
+    owner = db.relationship("User", back_populates="created_templates")
 
     def __init__(self,owner:User,form_response) -> None:
         self.name = form_response["title"]
@@ -72,6 +70,21 @@ class Template(db.Model):
             "Tid":self.Tid
         }
     
+    def instanciate(self,current_user):
+        stats = json.loads(self.stats)
+        stats["created"] += 1
+        stats["0"] += 1
+        self.stats = json.dumps(stats)
+        data = json.loads(self.data)
+        data["stations"][0]["Email"] = current_user.email
+        return Document(
+            data = json.dumps(data),
+            owner_id = current_user.id,
+            master_Tid = self.Tid,
+            stage = 0,
+            currentemail = current_user.email
+        )
+    
 
 class Document(db.Model):
     __tablename__ = "documents"
@@ -84,7 +97,7 @@ class Document(db.Model):
     currentemail = db.Column(db.String(255))
 
     master_template = db.relationship("Template")
-    owner = db.relationship("User")
+    owner = db.relationship("User", back_populates="created_documents")
 
     def toJSON(self):
         return {

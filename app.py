@@ -1,31 +1,32 @@
 import json
 from os import environ
+from threading import Thread
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
-from flask_login import login_required, LoginManager, current_user, login_user, logout_user
+from flask_login import login_required, LoginManager, current_user, login_user, logout_user # library imports
 
 from Models.forms import SigninForm,SignupForm
 from Models.dataModels import db,User,Template,Document
-from Models.functions import complition_email_send
+from Models.functions import complition_email_send #personally made imports
 
-load_dotenv()
+load_dotenv() # loading the variables from the .env file
 
-DBFILENAME = environ['DBFILENAME']
+DBFILENAME = environ['DBFILENAME'] # creating the app 
 app = Flask(__name__)
-loginmanager = LoginManager()
 
-app.config['JSON_SORT_KEYS'] = False
+app.config['JSON_SORT_KEYS'] = False # initializing config
 app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{DBFILENAME}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = "hello"
 
-Bootstrap(app)
+Bootstrap(app) # initalizing extensions
 db.init_app(app)
+loginmanager = LoginManager()
 loginmanager.init_app(app)
 loginmanager.login_view = "signin"
 
-@loginmanager.user_loader
+@loginmanager.user_loader # user loading function
 def load_user(user_id):
     return User.query.get(int(user_id))
 
@@ -38,10 +39,9 @@ def index():
 @app.route("/home")
 @login_required
 def home():
-    #docs = Document.query.filter_by(owner=current_user.id).all()
     if not current_user.is_authenticated:
         return redirect(url_for("index"))
-    return render_template("home.html",name = current_user.fullname,number = 0)#len(docs))
+    return render_template("home.html",name = current_user.fullname)
 
 @app.route("/preferances", methods = ['POST','GET'])
 @login_required
@@ -56,19 +56,18 @@ def preferances():
 @app.route("/signin", methods = ['POST','GET'])
 def signin():
 
-    if current_user.is_authenticated:
+    if current_user.is_authenticated: # a logged in user should not need to login again
         return redirect(url_for("home"))
 
     form = SigninForm()
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        signinngIn = User.query.filter_by(username=username,password = password).first()
-        if signinngIn is None:
+        signinngIn = User.query.filter_by(username=username,password = password).first() # get the first user with the combination username and password that where entered, usernames are unique thus if the password is correct we will have only 1 user
+        if signinngIn is None: # this means that no user was found
             return render_template("signin.html",form = form,found = False,msg = f"Username or password incorrect")
         else:
-            print(signinngIn)
-            login_user(signinngIn)
+            login_user(signinngIn) # login and redirect home
             return redirect(url_for("home"))
     else:
         return render_template("signin.html",form = form,found = True,msg = "")
@@ -76,11 +75,12 @@ def signin():
 @app.route("/signup", methods = ['POST','GET'])
 def signup():
 
-    if current_user.is_authenticated:
+    if current_user.is_authenticated: # a logged in user should not need to signup again
         return redirect(url_for("home"))
 
     if request.method == 'POST':
         count = User.query.filter((User.email == request.form.get("email")) | (User.username == request.form.get("username"))).count()
+        # check if there are any users with the same username or same email and prevent them from signing up
         if count !=0:
             form = SignupForm()
             return render_template("signup.html",form = form,err = True,msg = f"Username or Email are already in use")
@@ -108,7 +108,6 @@ def my_templates():
     if mode == "all":
         temps = Template.query.all()
     temps = [t.toJSON() for t in temps]
-    temps.append({"name":"Create new template", "description":"press here to create a new template", "Tid":0})
     return render_template("templates.html",templates = temps, mode = mode)
 
 @app.route('/Mydocuments')
@@ -194,19 +193,7 @@ def createtemp():
 @login_required
 def createdocument(id):
     template = Template.query.get(id)
-    stats = json.loads(template.stats)
-    stats["created"] += 1
-    stats["0"] += 1
-    template.stats = json.dumps(stats)
-    data = json.loads(template.data)
-    data["stations"][0]["Email"] = current_user.email
-    newDoc = Document(
-        data = json.dumps(data),
-        owner_id = current_user.id,
-        master_Tid = template.Tid,
-        stage = 0,
-        currentemail = current_user.email
-    )
+    newDoc = template.instanciate(current_user)
     db.session.add(newDoc)
     db.session.commit()
     return redirect(url_for("documents",id=newDoc.Did))
