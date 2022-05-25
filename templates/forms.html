@@ -1,11 +1,11 @@
 {% extends 'userbase.html' %}
 
 {% block head %}
-<title>My Forms</title>
+<title>My Documents</title>
 {% endblock %}
 
 {% block body %}
-<h2 class="form-header">My Created Forms</h2>
+<h2 class="form-header">My Created Documents</h2>
 <div class="card-wrapper">
     {%for temp in MyDocuments%}
     <div class="card" style="width: 18rem;">
@@ -25,14 +25,30 @@
     </div>
 </div>
 <hr>
-<h2 class="form-header">Pending Forms</h2>
+<h2 class="form-header">Pending Documents</h2>
 <div class="card-wrapper">
     {%for temp in pendingDocuments%}
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">{{temp.name}}</h5>
             <p class="card-text">{{temp.description}}</p>
-            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a>
+            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a><br>
+            <small>Created by: {{temp.creator}}</small>
+        </div>
+    </div>
+    {%endfor%}
+    
+</div>
+<hr>
+<h2 class="form-header">Past Documents</h2>
+<div class="card-wrapper">
+    {%for temp in pastdocs%}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{temp.name}}</h5>
+            <p class="card-text">{{temp.description}}</p>
+            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a><br>
+            <small>Created by: {{temp.creator}}</small>
         </div>
     </div>
     {%endfor%}

@@ -10,6 +10,12 @@ default_preferances = json.dumps({
     "alert_time":"12:00"
 })
 
+association_table = db.Table(
+    "association",
+    db.Column("user", db.ForeignKey("users.id")),
+    db.Column("document", db.ForeignKey("documents.Did"))
+)
+
 class User(db.Model, UserMixin):
     __tablename__ = "users"
 
@@ -20,8 +26,12 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(80), nullable=False)
     preferances = db.Column(db.JSON, nullable=False)
 
-    created_templates = db.relationship("Template",back_populates="owner")
-    created_documents = db.relationship("Document",back_populates="owner")
+    created_templates = db.relationship("Template", backref="owner")
+    
+    created_documents = db.relationship("Document", backref="owner", foreign_keys="[Document.owner_id]")
+    pending_documents = db.relationship("Document", foreign_keys="[Document.currentemail]")
+    past_documents = db.relationship("Document", secondary=association_table)
+
 
     def __init__(self,username,fullname,email,password) -> None:
         self.username = username
@@ -54,8 +64,6 @@ class Template(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     data = db.Column(db.JSON, nullable=False)
     stats = db.Column(db.JSON, nullable=False)
-
-    owner = db.relationship("User", back_populates="created_templates")
 
     def __init__(self,owner:User,form_response) -> None:
         self.name = form_response["title"]
@@ -94,10 +102,9 @@ class Document(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     master_Tid = db.Column(db.Integer, db.ForeignKey("templates.Tid"))
     stage = db.Column(db.Integer)
-    currentemail = db.Column(db.String(255))
+    currentemail = db.Column(db.String(255), db.ForeignKey("users.email"))
 
     master_template = db.relationship("Template")
-    owner = db.relationship("User", back_populates="created_documents")
 
     def toJSON(self):
         return {

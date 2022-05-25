@@ -1,6 +1,5 @@
 import json
 from os import environ
-from threading import Thread
 from dotenv import load_dotenv
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
@@ -115,9 +114,11 @@ def my_templates():
 def my_documents():
     mydocs = current_user.created_documents
     mydocs = [d.toJSON() for d in mydocs]
-    pendingdocs = Document.query.filter_by(currentemail = current_user.email).all()
+    pendingdocs = current_user.pending_documents
     pendingdocs = [d.toJSON() for d in pendingdocs]
-    return render_template("forms.html", MyDocuments = mydocs, pendingDocuments = pendingdocs)
+    pastdocs = current_user.past_documetns
+    pastdocs = [d.toJSON() for d in pastdocs]
+    return render_template("forms.html", MyDocuments = mydocs, pendingDocuments = pendingdocs, pastdocs=pastdocs)
 
 @app.route('/templates/<id>')
 @login_required
@@ -137,9 +138,10 @@ def documents(id):
         document = Document.query.get(id)
         data = json.loads(document.data)
         return render_template("documentview.html",data = data,stage = document.stage, allowed = document.currentemail == current_user.email)
-    else:
+    else: 
         document = Document.query.get(id)
-        data = json.loads(document.data)
+        current_user.past_documents.append(document)
+        data = json.loads(document.data) # TODO: move this part to a function in the document class
         formdata = request.form.to_dict()
         stage = int(formdata.pop("stage"))
         choice = formdata.pop("choice")
@@ -187,7 +189,7 @@ def createtemp():
     )
     db.session.add(tem1)
     db.session.commit()
-    return redirect(url_for("home"))
+    return redirect(url_for("my_templates"))
 
 @app.route('/CreateDocument/<id>')
 @login_required
@@ -217,7 +219,6 @@ def api_count_of_docs_for_user(user_id):
 
 @app.route('/purgedatabase')
 def purge():
-    # os.remove(dbfilename)
     db.drop_all()
     db.create_all()
     ilay = User( 
