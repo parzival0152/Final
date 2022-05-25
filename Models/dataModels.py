@@ -2,7 +2,7 @@ import json
 from typing import Iterator, Tuple
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from Models.functions import parse_response
+from Models.functions import parse_response, complition_email_send, fail_email_send
 
 db = SQLAlchemy()
 
@@ -40,12 +40,29 @@ class User(db.Model, UserMixin):
         self.password = password
         self.preferances = default_preferances
 
-    def toJSON(self):
+    def __repr__(self) -> str:
+        return f"<User {self.id}>"
+
+    def get_info(self):
         return {
             "id":self.id,
             "name":self.fullname,
             "email":self.email,
             "preferances":json.loads(self.preferances)
+        }
+
+    def toJSON(self):
+        return {
+            "id":self.id,
+            "username":self.username,
+            "fullname":self.fullname,
+            "email":self.email,
+            "password":self.password,
+            "preferances":json.loads(self.preferances),
+            "my templates":[t.__repr__() for t in self.created_templates],
+            "my documents":[d.__repr__() for d in self.created_documents],
+            "pending documents":[d.__repr__() for d in self.pending_documents],
+            "past documents":[d.__repr__() for d in self.past_documents]
         }
 
     def update_preferances(self,items:Iterator[Tuple[str, str]]):
@@ -70,14 +87,27 @@ class Template(db.Model):
         self.description = form_response["description"]
         self.data, self.stats = parse_response(form_response)
         self.owner_id = owner.id
+    
+    def __repr__(self) -> str:
+        return f"<Template {self.Tid}>"
 
-    def toJSON(self):
+    def get_info(self):
         return {
             "name":self.name,
             "description":self.description,
             "Tid":self.Tid
         }
     
+    def toJSON(self):
+        return {
+            "Tid":self.Tid,
+            "name":self.name,
+            "description":self.description,
+            "data":json.loads(self.data),
+            "stats":json.loads(self.stats),
+            "owner":self.owner
+        }
+
     def instanciate(self,current_user):
         stats = json.loads(self.stats)
         stats["created"] += 1
@@ -106,6 +136,17 @@ class Document(db.Model):
 
     master_template = db.relationship("Template")
 
+    def __repr__(self) -> str:
+        return f"<Document {self.Did}>"
+
+    def get_info(self):
+        return {
+            "name":self.master_template.name,
+            "description":self.master_template.description,
+            "creator":self.owner.fullname,
+            "Did":self.Did
+        }
+
     def toJSON(self):
         return {
             "name":self.master_template.name,
@@ -113,3 +154,40 @@ class Document(db.Model):
             "creator":self.owner.fullname,
             "Did":self.Did
         }
+    
+    def advance(self,formdata):
+        data = json.loads(self.data)
+        stage = int(formdata.pop("stage"))
+        choice = formdata.pop("choice")
+
+        stationdata = data["stations"][stage]["fields"]
+        for index,value in formdata.items():
+            stationdata[int(index)]["value"] = value
+        data["stations"][stage]["fields"] = stationdata
+        nextemail = ""
+        completed = False
+        try:
+            nextemail = data["stations"][stage+1]["Email"]
+        except IndexError:
+            completed = True
+
+        origintemplate = self.master_template
+        stats = json.loads(origintemplate.stats)
+        stats[str(stage)] -= 1
+        
+        if choice == "Deny":
+            stats["failed"]+=1
+            nextemail = ""
+            fail_email_send(self.owner)
+        else:
+            if completed:
+                stats["completed"]+=1
+                complition_email_send(self.owner)
+            else:
+                stats[str(stage+1)] += 1
+            
+
+        self.data = json.dumps(data)
+        self.stage += 1
+        self.currentemail = nextemail
+        origintemplate.stats = json.dumps(stats)

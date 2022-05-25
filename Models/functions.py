@@ -53,3 +53,12 @@ def complition_email_send(user) -> None:
         Please take your time to check it out in our system.
     '''
     send_email(email,msg)
+
+def fail_email_send(user) -> None:
+    username = user.fullname
+    email = user.email
+    msg = f'''
+        Hello {username}, a document that you have created has been rejected along the way.\n
+        Please take your time to check it out in our system.
+    '''
+    send_email(email,msg)

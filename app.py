@@ -62,11 +62,11 @@ def signin():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        signinngIn = User.query.filter_by(username=username,password = password).first() # get the first user with the combination username and password that where entered, usernames are unique thus if the password is correct we will have only 1 user
-        if signinngIn is None: # this means that no user was found
+        signingIn = User.query.filter_by(username=username,password = password).first() # get the first user with the combination username and password that where entered, usernames are unique thus if the password is correct we will have only 1 user
+        if signingIn is None: # this means that no user was found
             return render_template("signin.html",form = form,found = False,msg = f"Username or password incorrect")
         else:
-            login_user(signinngIn) # login and redirect home
+            login_user(signingIn) # login and redirect home
             return redirect(url_for("home"))
     else:
         return render_template("signin.html",form = form,found = True,msg = "")
@@ -103,22 +103,22 @@ def signup():
 @login_required
 def my_templates():
     temps = current_user.created_templates
-    mode = request.args.get("mode", default="none")
-    if mode == "all":
-        temps = Template.query.all()
-    temps = [t.toJSON() for t in temps]
+    mode = request.args.get("mode", default="none") # check the path mode
+    if mode == "all": # if the mode is 'all'
+        temps = Template.query.all() # respond with the entire template table
+    temps = [t.get_info() for t in temps]
     return render_template("templates.html",templates = temps, mode = mode)
 
 @app.route('/Mydocuments')
 @login_required
 def my_documents():
-    mydocs = current_user.created_documents
-    mydocs = [d.toJSON() for d in mydocs]
-    pendingdocs = current_user.pending_documents
-    pendingdocs = [d.toJSON() for d in pendingdocs]
-    pastdocs = current_user.past_documetns
-    pastdocs = [d.toJSON() for d in pastdocs]
-    return render_template("forms.html", MyDocuments = mydocs, pendingDocuments = pendingdocs, pastdocs=pastdocs)
+    my_docs = current_user.created_documents
+    my_docs = [d.get_info() for d in my_docs]
+    pending_docs = current_user.pending_documents
+    pending_docs = [d.get_info() for d in pending_docs]
+    past_docs = current_user.past_documents
+    past_docs = [d.get_info() for d in past_docs]
+    return render_template("forms.html", MyDocuments = my_docs, pendingDocuments = pending_docs, pastdocs=past_docs)
 
 @app.route('/templates/<id>')
 @login_required
@@ -141,42 +141,7 @@ def documents(id):
     else: 
         document = Document.query.get(id)
         current_user.past_documents.append(document)
-        data = json.loads(document.data) # TODO: move this part to a function in the document class
-        formdata = request.form.to_dict()
-        stage = int(formdata.pop("stage"))
-        choice = formdata.pop("choice")
-
-        stationdata = data["stations"][stage]["fields"]
-        for index,value in formdata.items():
-            stationdata[int(index)]["value"] = value
-        data["stations"][stage]["fields"] = stationdata
-        nextemail = ""
-        completed = False
-        try:
-            nextemail = data["stations"][stage+1]["Email"]
-        except IndexError:
-            completed = True
-
-        origintemplate = document.master_template
-        stats = json.loads(origintemplate.stats)
-        stats[str(stage)] -= 1
-        
-        if choice == "Deny":
-            stats["failed"]+=1
-            nextemail = ""
-        else:
-            if completed:
-                stats["completed"]+=1
-                originatorEmail = data["stations"][0]["Email"]
-                complition_email_send(User.query.filter_by(email = originatorEmail).first())
-            else:
-                stats[str(stage+1)] += 1
-            
-
-        document.data = json.dumps(data)
-        document.stage += 1
-        document.currentemail = nextemail
-        origintemplate.stats = json.dumps(stats)
+        document.advance(request.form.to_dict())
         db.session.commit()
         return redirect(url_for("my_documents"))
 
@@ -208,13 +173,13 @@ def signout():
 
 @app.route('/api/users')
 def api_users():
-    users = [u.toJSON() for u in User.query.all()]
+    users = [u.user_info() for u in User.query.all()]
     return jsonify(users)
 
 @app.route('/api/docs_count/<user_id>')
 def api_count_of_docs_for_user(user_id):
-    user_email = User.query.get(user_id).email
-    docs = Document.query.filter(Document.currentemail==user_email).count()
+    user = User.query.get(user_id)
+    docs = len(user.pending_documents)
     return jsonify({"count":docs})
 
 @app.route('/purgedatabase')
