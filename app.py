@@ -6,8 +6,7 @@ from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user # library imports
 
 from Models.forms import SigninForm,SignupForm
-from Models.dataModels import db,User,Template,Document
-from Models.functions import complition_email_send #personally made imports
+from Models.dataModels import db,User,Template,Document #personally made imports
 
 load_dotenv() # loading the variables from the .env file
 
@@ -173,7 +172,7 @@ def signout():
 
 @app.route('/api/users')
 def api_users():
-    users = [u.user_info() for u in User.query.all()]
+    users = [u.get_info() for u in User.query.all()]
     return jsonify(users)
 
 @app.route('/api/docs_count/<user_id>')

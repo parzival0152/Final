@@ -11,24 +11,7 @@ def parse_response(form_response): # magic
         fields = dict([(identifier.replace(stationId+"_",""),value) for identifier,value in fields])
         name = fields.pop("Name")
         email = fields.pop("Email")
-        fieldList = []
-        for identifier,value in fields.items():
-            if "text" in identifier:
-                fieldList.append({
-                    "type":"text",
-                    "value":value
-                })
-            elif "input" in identifier:
-                fieldList.append({
-                    "type":"input",
-                    "prompt":value,
-                    "value":""
-                })
-            elif "image" in identifier:
-                fieldList.append({
-                    "type":"image",
-                    "value":value
-                })
+        fieldList = generate_field_list(fields)
         stations.append({
             "Name":name,
             "Email":email,
@@ -62,3 +45,25 @@ def fail_email_send(user) -> None:
         Please take your time to check it out in our system.
     '''
     send_email(email,msg)
+
+def generate_field_list(fields):
+    fieldList = []
+    for identifier,value in fields.items():
+        if "text" in identifier:
+            fieldList.append({
+                "type":"text",
+                "value":value
+            })
+        elif "input" in identifier:
+            fieldList.append({
+                "type":"input",
+                "prompt":value,
+                "value":""
+            })
+        elif "image" in identifier:
+            fieldList.append({
+                "type":"image",
+                "value":value
+            })
+    # print(list(groupby(fields.items(), lambda s: s[0].partition('_')[0])))
+    return fieldList

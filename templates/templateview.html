@@ -14,41 +14,58 @@
 {% endblock %}
 
 {% block body %}
-<div class="main-content">
-    <h1>{{data["title"]}}</h1>
-    <h4>{{data["description"]}}</h4>
-    {% for station in data["stations"] %}
-    {% set StationIndex = loop.index0 %}
-    <div class="StationWrapper">
-        <div class="StationHead">
-            <button type="button" id="StationHeadButton{{StationIndex}}"> {{station["Name"]}}</button>
-            {{station["Email"]}}
-        </div>
-        <div class="StationBody" id="StationBody{{StationIndex}}">
-            {% for field in station["fields"] %}
-                {% if field["type"] == "text" %}
-                <p class="text">{{field["value"]}}</p> 
-                {% elif field["type"] == "input" %}
-                 <div class="form-floating">
-                    <input type="text" maxlength="100" placeholder="Template Title" name="Station{{StationIndex}}_input{{loop.index}}" class="form-control" disabled>
-                    <label for="title">{{field["prompt"]}}</label>
-                </div> 
-                {% endif %}
+<div class="template-home">
+    <div class="form-wrapper round-corners">
+        <div class="main-content">
+            <h1>{{data["title"]}}</h1>
+            <h4>{{data["description"]}}</h4>
+            {% for station in data["stations"] %}
+            {% set StationIndex = loop.index0 %}
+            <div class="StationWrapper">
+                <div class="StationHead" style="color:hotpink">
+                    <button type="button" id="StationHeadButton{{StationIndex}}" class="btn btn-primary"> {{station["Name"]}}</button>
+                    {{station["Email"]}}
+                </div>
+                <div class="StationBody" id="StationBody{{StationIndex}}">
+                    {% for field in station["fields"] %}
+                        {% if field["type"] == "text" %}
+                        <p class="text">{{field["value"]}}</p>
+                        {% elif field["type"] == "input" %}
+                         <div class="form-floating">
+                            <input type="text" maxlength="100" placeholder="Template Title" name="Station{{StationIndex}}_input{{loop.index}}" class="form-control" disabled>
+                            <label for="title">{{field["prompt"]}}</label>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
             {% endfor %}
+            <button class="btn btn-primary" type="button" id="instance">Instanciate this Template as your own document</button><br>
         </div>
     </div>
-    {% endfor %}
-    <button class="btn" type="button"><a href="/CreateDocument/{{id}}">Instanciate this Template as your own document</a></button><br>
-    <table class="statstable">
-        {% if viewstats %}
+</div>
+<div class="home">
+    {% if viewstats %}
+    <table class="table table-striped">
+        <thead>
+            <td>Stage</td>
+            <td>Count</td>
+        </thead>
         {% for key, value in stats.items() %}
         <tr>
             <th>{{key}}</th>
             <td>{{value}}</td>
         </tr>
         {% endfor %}
-        {% endif %}
     </table>
+    {% endif %}
 </div>
+<span id="id" class="hidden">{{id}}</span>
 <script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
+<script>
+    let id = $('#id').text();
+    $('#instance').on('click',()=>{
+        location.href = `/CreateDocument/${id}`
+    });
+</script>
 {% endblock %}

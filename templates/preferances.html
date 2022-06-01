@@ -5,18 +5,20 @@
 {% endblock %}
 
 {%block body%}
-<div class="form-wrapper round-corners">
-    <form action="" method="post" id="form">
-        <div class="form-floating input-group">
-            <input type="time" maxlength="100" placeholder="17:00" name="alert_time" class="form-control" value="{{preferances['alert_time']}}">
-            <label for="alert time">Alert Time</label>
-            <!-- <button type="button" name="alert_time_button"><i class="material-icons" style="color:White">edit</i></button> -->
-            <!-- <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" onclick="()=>{console.log('click')}"><i class="material-icons" style="color:White">edit</i></button>
-              </div> -->
-        </div>
-    </form>
-    <button type="submit" class="btn btn-primary" form="form">Update</button>
+<div class="home">
+    <div class="form-wrapper round-corners">
+        <form action="" method="post" id="form">
+            <div class="form-floating input-group">
+                <input type="time" maxlength="100" placeholder="17:00" name="alert_time" class="form-control" value="{{preferances['alert_time']}}">
+                <label for="alert time">Alert Time</label>
+                <!-- <button type="button" name="alert_time_button"><i class="material-icons" style="color:White">edit</i></button> -->
+                <!-- <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" onclick="()=>{console.log('click')}"><i class="material-icons" style="color:White">edit</i></button>
+                  </div> -->
+            </div>
+        </form>
+        <button type="submit" class="btn btn-primary" form="form">Update</button>
+    </div>
 </div>
 
 <!-- <script src="{{url_for('static', filename='scripts/preferances.js') }}"></script> -->

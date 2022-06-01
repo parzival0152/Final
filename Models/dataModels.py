@@ -10,8 +10,8 @@ default_preferances = json.dumps({
     "alert_time":"12:00"
 })
 
-association_table = db.Table(
-    "association",
+past_documents_table = db.Table(
+    "past_documents",
     db.Column("user", db.ForeignKey("users.id")),
     db.Column("document", db.ForeignKey("documents.Did"))
 )
@@ -30,7 +30,7 @@ class User(db.Model, UserMixin):
     
     created_documents = db.relationship("Document", backref="owner", foreign_keys="[Document.owner_id]")
     pending_documents = db.relationship("Document", foreign_keys="[Document.currentemail]")
-    past_documents = db.relationship("Document", secondary=association_table)
+    past_documents = db.relationship("Document", secondary=past_documents_table)
 
 
     def __init__(self,username,fullname,email,password) -> None:

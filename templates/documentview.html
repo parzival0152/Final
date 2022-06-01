@@ -14,33 +14,38 @@
 {% endblock %}
 
 {% block body %}
-<div class="main-content">
-    <form action="" method="post">
-    <h1>{{data["title"]}}</h1>
-    <h4>{{data["description"]}}</h4>
-    {% for station in data["stations"] %}
-    {% set StationIndex = loop.index0 %}
-    <div class="StationWrapper">
-        <div class="StationHead">
-            <button type="button" id="StationHeadButton{{StationIndex}}"> {{station["Name"]}}</button>
-            {{station["Email"]}}
-        </div>
-        <div class="StationBody" id="StationBody{{StationIndex}}">
-            {% for field in station["fields"] %}
-                {% if field["type"] == "text" %}
-                <p class="text">{{field["value"]}}</p> 
-                {% elif  "input" in field["type"] %}
-                 <div class="form-floating">
-                    <input type="text" maxlength="100" placeholder="Template Title" name="{{loop.index0}}" class="form-control" value="{{field['value']}}" disabled>
-                    <label for="title">{{field["prompt"]}}</label>
-                </div> 
-                {% endif %}
-            {% endfor %}
+<div class="template-home">
+    <div class="form-wrapper round-corners">
+        <div class="main-content">
+            <form action="" method="post">
+                <h1>{{data["title"]}}</h1>
+                <h4>{{data["description"]}}</h4>
+                {% for station in data["stations"] %}
+                {% set StationIndex = loop.index0 %}
+                <div class="StationWrapper">
+                    <div class="StationHead" style="color:hotpink">
+                        <button type="button" id="StationHeadButton{{StationIndex}}" class="btn btn-primary"> {{station["Name"]}}</button>
+                        {{station["Email"]}}
+                    </div>
+                    <div class="StationBody" id="StationBody{{StationIndex}}">
+                        {% for field in station["fields"] %}
+                        {% if field["type"] == "text" %}
+                        <p class="text">{{field["value"]}}</p>
+                        {% elif "input" in field["type"] %}
+                        <div class="form-floating">
+                            <input type="text" maxlength="100" placeholder="Template Title" name="{{loop.index0}}"
+                                class="form-control" value="{{field['value']}}" disabled>
+                            <label for="title">{{field["prompt"]}}</label>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <input style="display: none;" id="stage" name="stage" value="{{stage}}">
+            </form>
         </div>
     </div>
-    {% endfor %}
-    <input style="display: none;" id="stage" name="stage" value="{{stage}}">
-</form>
 </div>
 <span id="allowed" style="display: none;">{{allowed}}</span>
 <script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
