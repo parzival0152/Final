@@ -8,7 +8,7 @@ class inputCreator {
     }
 
     CreateInputField = () => {
-        let div = $("<div></div>").addClass("form-floating");
+        let div = $("<div></div>").addClass("form-floating w-75");
         let name = `Station${this.stationId}_input${this.count}`;
         let input = $("<input></input>").addClass("form-control").attr({
             name: name,
@@ -28,7 +28,7 @@ class inputCreator {
     };
 
     CreateImageField = () => {
-        let div = $("<div></div>").addClass("form-floating");
+        let div = $("<div></div>").addClass("form-floating w-75");
         let name = `Station${this.stationId}_image${this.count}`;
         let input = $("<input></input>").addClass("form-control").attr({
             name: name,
@@ -48,7 +48,7 @@ class inputCreator {
     };
 
     CreateTextField = () => {
-        let div = $("<div></div>").addClass("form-floating");
+        let div = $("<div></div>").addClass("form-floating w-75");
         let name = `Station${this.stationId}_text${this.count}`;
         let input = $("<textarea></textarea>").addClass("form-control").attr({
             name: name,
