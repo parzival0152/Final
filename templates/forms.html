@@ -5,53 +5,23 @@
 {% endblock %}
 
 {% block body %}
-<h2 class="form-header">My Created Documents</h2>
-<div class="card-wrapper">
-    {%for temp in MyDocuments%}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{temp.name}}</h5>
-            <p class="card-text">{{temp.description}}</p>
-            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a>
+    <div id="app">
+        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">
+            <button type="button" :class="[state==-1 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_past_docs">Past Documents</button>
+            <button type="button" :class="[state==0 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_pending_docs">Pending Documents</button>
+            <button type="button" :class="[state==1 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_created_docs">Created Documents</button>
+          </div>
+        <div class="card-wrapper">
+            <div v-for="doc in docs" class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">[[doc.name]]</h5>
+                    <p class="card-text">[[doc.description]]</p>
+                    <a :href="doc.href" class="btn btn-primary">view document</a><br>
+                    <small>Created by: [[doc.creator]]</small>
+                </div>
+            </div>
         </div>
     </div>
-    {%endfor%}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Create Document</h5>
-            <p class="card-text">Create a document from the templates created by other users</p>
-            <a href="/Mytemplates?mode=all" class="btn btn-primary">view all templates</a>
-        </div>
-    </div>
-</div>
-<hr>
-<h2 class="form-header">Pending Documents</h2>
-<div class="card-wrapper">
-    {%for temp in pendingDocuments%}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{temp.name}}</h5>
-            <p class="card-text">{{temp.description}}</p>
-            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a><br>
-            <small>Created by: {{temp.creator}}</small>
-        </div>
-    </div>
-    {%endfor%}
-    
-</div>
-<hr>
-<h2 class="form-header">Past Documents</h2>
-<div class="card-wrapper">
-    {%for temp in pastdocs%}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{temp.name}}</h5>
-            <p class="card-text">{{temp.description}}</p>
-            <a href="/documents/{{temp.Did}}" class="btn btn-primary">view document</a><br>
-            <small>Created by: {{temp.creator}}</small>
-        </div>
-    </div>
-    {%endfor%}
-    
-</div>
+
+<script src="{{url_for('static', filename='scripts/docsVue.js') }}"></script>
 {% endblock %}

@@ -1,7 +1,7 @@
 import json
 from os import environ
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template, request, redirect, url_for
+from flask import Flask, jsonify, render_template, request, redirect, url_for, Response
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user # library imports
 
@@ -27,6 +27,9 @@ loginmanager.login_view = "signin"
 @loginmanager.user_loader # user loading function
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+# HTML endpoints
+# these are urls in the webserver that responde to the user with HTML pages and thus render output to the screen
 
 @app.route("/")
 def index():
@@ -170,6 +173,10 @@ def signout():
     logout_user()
     return redirect(url_for("index"))
 
+# json endpoint start here
+# there functions differ from the ones above as these functions return JSON objects rather then HTML
+# thus these are used as and 'api' of sort for clients such as the email subsystem and some front end features.
+
 @app.route('/api/users')
 def api_users():
     users = [u.get_info() for u in User.query.all()]
@@ -180,6 +187,37 @@ def api_count_of_docs_for_user(user_id):
     user = User.query.get(user_id)
     docs = len(user.pending_documents)
     return jsonify({"count":docs})
+
+@app.route('/api/docs_pending/<user_id>')
+def api_docs_pending(user_id):
+    user = User.query.get(user_id)
+    return jsonify([doc.get_info() for doc in user.pending_documents])
+
+@app.route('/api/docs_past/<user_id>')
+def api_docs_past(user_id):
+    user = User.query.get(user_id)
+    return jsonify([doc.get_info() for doc in user.past_documents])
+
+@app.route('/api/docs_created/<user_id>')
+def api_docs_created(user_id):
+    user = User.query.get(user_id)
+    return jsonify([doc.get_info() for doc in user.created_documents])
+
+@app.route('/api/templates/', defaults={'user_id': 0})
+@app.route('/api/templates/<user_id>')
+def api_templates(user_id):
+    templates = Template.query.all()
+    if not user_id == 0:
+        user = User.query.get(user_id)
+        templates = user.created_templates
+    return jsonify([temp.get_info() for temp in templates])
+
+@app.route('/api/current_user_id')
+def api_current_user_id():
+    if not current_user.is_authenticated: return jsonify({'message':"you are not authenticated"}),401
+    return jsonify({
+        'id':current_user.id
+    })
 
 @app.route('/purgedatabase')
 def purge():
