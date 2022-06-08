@@ -104,23 +104,13 @@ def signup():
 @app.route('/Mytemplates')
 @login_required
 def my_templates():
-    temps = current_user.created_templates
     mode = request.args.get("mode", default="none") # check the path mode
-    if mode == "all": # if the mode is 'all'
-        temps = Template.query.all() # respond with the entire template table
-    temps = [t.get_info() for t in temps]
-    return render_template("templates.html",templates = temps, mode = mode)
+    return render_template("templates.html", mode = mode)
 
 @app.route('/Mydocuments')
 @login_required
 def my_documents():
-    my_docs = current_user.created_documents
-    my_docs = [d.get_info() for d in my_docs]
-    pending_docs = current_user.pending_documents
-    pending_docs = [d.get_info() for d in pending_docs]
-    past_docs = current_user.past_documents
-    past_docs = [d.get_info() for d in past_docs]
-    return render_template("forms.html", MyDocuments = my_docs, pendingDocuments = pending_docs, pastdocs=past_docs)
+    return render_template("forms.html")
 
 @app.route('/templates/<id>')
 @login_required
@@ -187,6 +177,15 @@ def api_count_of_docs_for_user(user_id):
     user = User.query.get(user_id)
     docs = len(user.pending_documents)
     return jsonify({"count":docs})
+
+@app.route('/api/templates/<user_id>')
+def api_templates_user(user_id):
+    user = User.query.get(user_id)
+    return jsonify([temp.get_info() for temp in user.created_templates])
+
+@app.route('/api/templates_all')
+def api_templates_all():
+    return jsonify([temp.get_info() for temp in Template.query.all()])
 
 @app.route('/api/docs_pending/<user_id>')
 def api_docs_pending(user_id):

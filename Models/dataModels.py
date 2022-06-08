@@ -95,7 +95,10 @@ class Template(db.Model):
         return {
             "name":self.name,
             "description":self.description,
-            "Tid":self.Tid
+            "creator":self.owner.fullname,
+            "Tid":self.Tid,
+            "href":f"/documents/{self.Tid}"
+
         }
     
     def toJSON(self):

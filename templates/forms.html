@@ -5,23 +5,33 @@
 {% endblock %}
 
 {% block body %}
-    <div id="app">
-        <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">
-            <button type="button" :class="[state==-1 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_past_docs">Past Documents</button>
-            <button type="button" :class="[state==0 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_pending_docs">Pending Documents</button>
-            <button type="button" :class="[state==1 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_created_docs">Created Documents</button>
-          </div>
-        <div class="card-wrapper">
-            <div v-for="doc in docs" class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">[[doc.name]]</h5>
-                    <p class="card-text">[[doc.description]]</p>
-                    <a :href="doc.href" class="btn btn-primary">view document</a><br>
-                    <small>Created by: [[doc.creator]]</small>
-                </div>
+<div id="app">
+    <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">
+        <button type="button" :class="[state==-1 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_past_docs">Past Documents</button>
+        <button type="button" :class="[state==0 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_pending_docs">Pending Documents</button>
+        <button type="button" :class="[state==1 ? 'btn-primary' : 'btn-secondary', 'btn']" @click="get_created_docs">Created Documents</button>
+    </div>
+    <div class="btn-toolbar d-flex justify-content-center">
+        <div class="btn-group">
+            <button class="btn btn-light" @click="sortDocsAlphabeticallyName"><i class="material-icons">abc</i> by Name</button>
+            <button class="btn btn-light" @click="sortDocsAlphabeticallyCreator"><i class="material-icons">face</i> by Creator</button>
+            <button class="btn btn-light" @click="sortDocsDateCreated"><i class="material-icons">schedule</i> by Date</button>
+        </div>
+    </div>
+    <div class="card-wrapper">
+        <div v-for="doc in docs" class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">[[doc.name]]</h5>
+                <p class="card-text">[[doc.description]]</p>
+                <a :href="doc.href" class="btn btn-primary">view document</a><br>
+                <small>Created by: [[doc.creator]]</small>
             </div>
         </div>
     </div>
+</div>
+<a href="/Mytemplates?mode=all" class="btn btn-success buttom-right">
+    <i class="material-icons">add</i> New Document
+</a>
 
 <script src="{{url_for('static', filename='scripts/docsVue.js') }}"></script>
 {% endblock %}

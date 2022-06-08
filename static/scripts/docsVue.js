@@ -1,6 +1,4 @@
-//TODO: add sorting of documents
-// sort by title name
-// sort by created date
+
 
 const app = new Vue({
     el: '#app',
@@ -34,6 +32,18 @@ const app = new Vue({
             this.state = 1;
             let docs = await fetch(`/api/docs_created/${this.user_id}`);
             this.docs = await docs.json();
+        },
+        sortDocsAlphabeticallyName() {
+            console.log("sorting by name");
+            this.docs.sort((a, b) => a.name.localeCompare(b.name));
+        },
+        sortDocsAlphabeticallyCreator() {
+            console.log("sorting by creator");
+            this.docs.sort((a, b) => a.creator.localeCompare(b.creator));
+        },
+        sortDocsDateCreated() {
+            console.log("sorting by date");
+            this.docs.sort((a, b) => a.Did - b.Did);
         }
     }
 })

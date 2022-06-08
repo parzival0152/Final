@@ -5,29 +5,37 @@
 {% endblock %}
 
 {% block body %}
-<h2 class="form-header">
-    {% if mode == "all" %}
-    Created Templates
-    {% else %}
-    My Created Templates
-    {% endif %}
-</h2>
-<div class="card-wrapper">
-    {%for temp in templates%}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">{{temp.name}}</h5>
-            <p class="card-text">{{temp.description}}</p>
-            <a href="/templates/{{temp.Tid}}" class="btn btn-primary">view template</a>
+<script>
+    var mode = "{{ mode }}";
+</script>
+<div id="app">
+    <h2 class="form-header">
+        [[title]]
+    </h2>
+    <div class="btn-toolbar d-flex justify-content-center">
+        <div class="btn-group">
+            <button class="btn btn-light" @click="sortDocsAlphabeticallyName"><i class="material-icons">abc</i> by Name</button>
+            <button class="btn btn-light" @click="sortDocsAlphabeticallyCreator"><i class="material-icons">face</i> by Creator</button>
+            <button class="btn btn-light" @click="sortDocsDateCreated"><i class="material-icons">schedule</i> by Date</button>
+            <!-- <input type="checkbox" v-model="mode" true-value="all" false-value="none" name="modeselect"/>
+            <label for="modeselect">View All</label> -->
         </div>
     </div>
-    {%endfor%}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">Create new template</h5>
-            <p class="card-text">press here to create a new template</p>
-            <a href="/templates/0" class="btn btn-primary round-btn">+</a>
+    <div class="card-wrapper">
+        <div v-for="doc in temps" class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">[[doc.name]]</h5>
+                <p class="card-text">[[doc.description]]</p>
+                <a :href="doc.href" class="btn btn-primary">view template</a><br>
+                <small>Created by: [[doc.creator]]</small>
+            </div>
         </div>
     </div>
 </div>
+<a href="/templates/0" class="btn btn-success buttom-right">
+    <i class="material-icons">add</i> New Template
+</a>
+
+
+<script src="{{url_for('static', filename='scripts/tempsVue.js') }}"></script>
 {% endblock %}

@@ -85,6 +85,13 @@ hr{
 	display: inline-block;
 }
 
+.buttom-right {
+	position: absolute;
+	top: 90%;
+	left: 85%;
+	display: inline-block;
+}
+
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content{
 	display:flexbox;
