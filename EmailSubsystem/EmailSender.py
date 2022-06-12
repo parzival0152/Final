@@ -10,12 +10,12 @@ load_dotenv()
 SENDER_ADDRESS = environ['SENDER_ADDRESS']
 SENDER_PASS = environ['SENDER_PASS']
 
-def send_email(receiver_address:str , msg:str) -> None:
+def send_email(receiver_address:str , msg:str, subject:str = 'Schedualed update about your pending documents') -> None:
     #Setup the MIME
     message = MIMEMultipart()
     message['From'] = SENDER_ADDRESS
     message['To'] = receiver_address
-    message['Subject'] = 'Schedualed update about your pending documents'   #The subject line
+    message['Subject'] =subject   #The subject line
     #The body and the attachments for the mail
     message.attach(MIMEText(msg, 'plain'))
     #Create SMTP session for sending the mail

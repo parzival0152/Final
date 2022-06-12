@@ -97,7 +97,7 @@ class Template(db.Model):
             "description":self.description,
             "creator":self.owner.fullname,
             "Tid":self.Tid,
-            "href":f"/documents/{self.Tid}"
+            "href":f"/templates/{self.Tid}"
 
         }
     
@@ -108,7 +108,7 @@ class Template(db.Model):
             "description":self.description,
             "data":json.loads(self.data),
             "stats":json.loads(self.stats),
-            "owner":self.owner
+            "owner":self.owner.__repr__()
         }
 
     def instanciate(self,current_user):

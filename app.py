@@ -178,7 +178,7 @@ def api_count_of_docs_for_user(user_id):
     docs = len(user.pending_documents)
     return jsonify({"count":docs})
 
-@app.route('/api/templates/<user_id>')
+@app.route('/api/templates_user/<user_id>')
 def api_templates_user(user_id):
     user = User.query.get(user_id)
     return jsonify([temp.get_info() for temp in user.created_templates])
@@ -202,14 +202,10 @@ def api_docs_created(user_id):
     user = User.query.get(user_id)
     return jsonify([doc.get_info() for doc in user.created_documents])
 
-@app.route('/api/templates/', defaults={'user_id': 0})
-@app.route('/api/templates/<user_id>')
-def api_templates(user_id):
-    templates = Template.query.all()
-    if not user_id == 0:
-        user = User.query.get(user_id)
-        templates = user.created_templates
-    return jsonify([temp.get_info() for temp in templates])
+@app.route('/api/templates/<Tid>')
+def api_templates(Tid):
+    return jsonify(Template.query.get(Tid).toJSON())
+
 
 @app.route('/api/current_user_id')
 def api_current_user_id():

@@ -31,20 +31,22 @@ def parse_response(form_response): # magic
 def complition_email_send(user) -> None:
     username = user.fullname
     email = user.email
+    subject = 'An update about one of your documents'
     msg = f'''
         Hello {username}, a document that you have created has been completed.\n
         Please take your time to check it out in our system.
     '''
-    send_email(email,msg)
+    send_email(email,msg,subject)
 
 def fail_email_send(user) -> None:
     username = user.fullname
     email = user.email
+    subject = 'An update about one of your documents'
     msg = f'''
         Hello {username}, a document that you have created has been rejected along the way.\n
         Please take your time to check it out in our system.
     '''
-    send_email(email,msg)
+    send_email(email,msg,subject)
 
 def generate_field_list(fields):
     fieldList = []

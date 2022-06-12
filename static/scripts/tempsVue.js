@@ -33,7 +33,7 @@ const app = new Vue({
         },
         async get_user_temps() {
             console.log("user mode")
-            let docs = await fetch(`/api/templates/${this.user_id}`);
+            let docs = await fetch(`/api/templates_user/${this.user_id}`);
             this.temps = await docs.json();
         },
         sortDocsAlphabeticallyName() {
