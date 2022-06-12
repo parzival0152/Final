@@ -1,7 +1,7 @@
 import json
 from os import environ
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template, request, redirect, url_for, Response
+from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, LoginManager, current_user, login_user, logout_user # library imports
 
@@ -213,6 +213,11 @@ def api_current_user_id():
     return jsonify({
         'id':current_user.id
     })
+
+@app.route("/api/test", methods = ['POST'])
+def apitest():
+    print(request)
+    return jsonify({"response":"gottem"}),200
 
 @app.route('/purgedatabase')
 def purge():

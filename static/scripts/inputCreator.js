@@ -48,7 +48,7 @@ class inputCreator {
     };
 
     CreateTextField = () => {
-        let div = $("<div></div>").addClass("form-floating w-75");
+        let div = $("<div></div>").addClass(" w-75");
         let name = `Station${this.stationId}_text${this.count}`;
         let input = $("<textarea></textarea>").addClass("form-control").attr({
             name: name,
