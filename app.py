@@ -116,12 +116,10 @@ def my_documents():
 @login_required
 def templates(id):
     if(id=="0"):
-        return render_template("templateMaker.html")
+        return render_template("templateMaker2.html")
     else:
         template = Template.query.get(id)
-        data = json.loads(template.data)
-        stats = json.loads(template.stats)
-        return render_template("templateview.html",data = data,id = id,stats = stats,viewstats = template.owner.id==current_user.id)
+        return render_template("templateview.html",id = id,viewstats = template.owner.id==current_user.id)
 
 @app.route('/documents/<id>', methods = ['POST','GET'])
 @login_required

@@ -3,7 +3,7 @@
     overflow: hidden;
     margin: 1em;
     padding: 1em;
-    border: 0.4rem solid rgb(1, 27, 2);
+    border: 0.2rem solid rgb(1, 27, 2);
     border-radius: 0.5em;
 }
 
@@ -14,13 +14,8 @@ div.form-floating {
     margin-bottom: 2em;
 }
 
-table,
-th,
-td {
-    border: 1px solid;
+.field-wrapper{
+    padding: 5px;
+    box-shadow: 3px;
+    background-color: rgb(201, 201, 201);
 }
-
-table {
-    border-collapse: collapse;
-}
-

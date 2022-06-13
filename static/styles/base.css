@@ -7,7 +7,7 @@ body{
 }
 
 .form-wrapper{
-    background-color: lightgray;
+    background-color: rgb(225, 225, 225);
     padding: 5%;
     margin: 0% 18% 0%;
 }
@@ -65,7 +65,13 @@ hr{
 	margin:10px;
     display: flex;
     flex-direction: column;
-    }
+}
+
+.main-content {
+	text-align: center;
+	position: relative;
+	margin-top: 2%;
+}
 
 /* Dropdown Button */
 .dropbtn {

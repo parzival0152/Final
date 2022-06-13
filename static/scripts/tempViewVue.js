@@ -4,7 +4,6 @@ const app = new Vue({
     el: '#app',
     delimiters: ['[[', ']]'],
     data: {
-        text:"hello there",
         template_data:{},
         template_stats : {}
     },
@@ -12,11 +11,11 @@ const app = new Vue({
     },
     async created(){
         this.id = window.id;
+        this.stats_show = window.stats_show
         let response = await fetch('/api/templates/'+this.id);
         let data = await response.json()
         this.template_data = data.data
         this.template_stats = data.stats
-        console.log(this.template_data)
     },
     methods: {
     }

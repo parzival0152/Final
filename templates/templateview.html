@@ -2,17 +2,10 @@
 
 {% block head %}
 <title>Template viewer</title>
-<style>
-    .main-content {
-        text-align: center;
-        position: relative;
-        margin-top: 2%;
-    }
-</style>
-
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/templates.css') }}">
 <script>
     window.id = '{{id}}'
+    window.stats_show = '{{viewstats}}'
 </script>
 {% endblock %}
 
@@ -29,14 +22,13 @@
                         <h6 v-if="station.Email"> station Email: [[station.Email]] </h6>
                     </div>
                     <div class="StationBody">
-                        <div class="field-wrapper" v-for="field in station.fields">
+                        <div class="field-wrapper my-2 p-2 d-flex justify-content-center round-corners" v-for="field in station.fields">
                             <p v-if="field.type == 'text'">
                                 [[field.value]]
                             </p>
                             <div class="w-75" v-if="field.type == 'input'">
                                 <label>[[field.prompt]]</label>
-                                <input type="text" v-model="field.value" class="form-control">
-                                <h1>[[field.value]]</h1>
+                                <input type="text" v-model="field.value" class="form-control" disabled>
                             </div>
                         </div>
                     </div>
@@ -45,30 +37,18 @@
             </div>
         </div>
     </div>
+    <div class="home" v-if="stats_show">
+        <table class="table table-striped table-hover table-bordered table-sm">
+            <thead>
+                <td>Stage</td>
+                <td>Count</td>
+            </thead>
+            <tr v-for="(count,key) in template_stats">
+                <td>[[key]]</td>
+                <td>[[count]]</td>
+            </tr>
+        </table>
+    </div>
 </div>
-<div class="home">
-    {% if viewstats %}
-    <table class="table table-striped">
-        <thead>
-            <td>Stage</td>
-            <td>Count</td>
-        </thead>
-        {% for key, value in stats.items() %}
-        <tr>
-            <th>{{key}}</th>
-            <td>{{value}}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-</div>
-<span id="id" class="hidden">{{id}}</span>
-<script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
-<script>
-    let id = $('#id').text();
-    $('#instance').on('click', () => {
-        location.href = `/CreateDocument/${id}`
-    });
-</script>
 <script src="{{ url_for('static', filename='scripts/tempViewVue.js') }}"></script>
 {% endblock %}
