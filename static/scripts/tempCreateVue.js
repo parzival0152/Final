@@ -1,4 +1,4 @@
-
+/// <reference path="index.js" />
 
 const app = new Vue({
     el: '#app',
@@ -22,7 +22,7 @@ const app = new Vue({
     },
     methods: {
         create_template(){
-            console.log("not yet")
+            postData('/api/test',this.template_data)
         },
         add_station(){
             this.template_data.stations.push({

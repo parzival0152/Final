@@ -1,0 +1,64 @@
+{
+    "title": "",
+    "description": "",
+    "stations": [
+        {
+            "Name": "",
+            "fields": [
+                {
+                    "type": "input",
+                    "prompt": "aaa",
+                    "value": ""
+                },
+                {
+                    "type": "input",
+                    "prompt": "aaa",
+                    "value": ""
+                },
+                {
+                    "type": "input",
+                    "prompt": "aaaaa",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "Name": "",
+            "Email": "",
+            "fields": [
+                {
+                    "type": "text",
+                    "value": "fffff"
+                },
+                {
+                    "type": "input",
+                    "prompt": "ffffff",
+                    "value": ""
+                }
+            ]
+        },
+        {
+            "Name": "",
+            "Email": "",
+            "fields": [
+                {
+                    "type": "input",
+                    "prompt": "dfgdfg",
+                    "value": ""
+                },
+                {
+                    "type": "text",
+                    "value": "dfgdfg"
+                },
+                {
+                    "type": "text",
+                    "value": "dfgdfg"
+                },
+                {
+                    "type": "text",
+                    "value": "dfgdfgdfgdfgdfg"
+                }
+            ]
+        }
+    ]
+}

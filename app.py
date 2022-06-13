@@ -214,8 +214,9 @@ def api_current_user_id():
 
 @app.route("/api/test", methods = ['POST'])
 def apitest():
-    print(request)
-    return jsonify({"response":"gottem"}),200
+    with open('test.json','w') as f:
+        f.write(json.dumps(request.json))
+    return redirect(url_for("home"))
 
 @app.route('/purgedatabase')
 def purge():

@@ -156,7 +156,9 @@ class Document(db.Model):
             "name":self.master_template.name,
             "description":self.master_template.description,
             "creator":self.owner.fullname,
-            "Did":self.Did
+            "Did":self.Did,
+            "data":json.loads(self.data),
+            "stage":self.stage
         }
     
     def advance(self,formdata):
