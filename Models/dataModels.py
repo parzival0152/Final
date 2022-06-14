@@ -162,7 +162,6 @@ class Document(db.Model):
         }
     
     def advance(self,response_data):
-        data = json.loads(self.data)
         stage = self.stage
         choice = response_data['choice']
 
@@ -182,12 +181,15 @@ class Document(db.Model):
         if choice == "reject":
             stats["failed"]+=1
             nextemail = ""
+            data['stations'][stage]['state'] = 'border-danger'
             fail_email_send(self.owner)
         else:
+            data['stations'][stage]['state'] = 'border-success'
             if completed:
                 stats["completed"]+=1
                 complition_email_send(self.owner)
             else:
+                data['stations'][stage+1]['state'] = 'border-warning'
                 stats[f"Stage #{stage+1}"] += 1
             
 

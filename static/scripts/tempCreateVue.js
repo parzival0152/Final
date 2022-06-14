@@ -9,8 +9,9 @@ const app = new Vue({
             description:"",
             stations:[
                 {
-                    state:"",
                     Name:"",
+                    Email:"",
+                    state:"border-warning",
                     fields:[]
                 }
             ]
@@ -42,6 +43,7 @@ const app = new Vue({
             this.template_data.stations.push({
                 Name:"",
                 Email:"",
+                state:"border-info",
                 fields:[]
             })
         },

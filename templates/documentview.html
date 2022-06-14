@@ -16,7 +16,7 @@
             <div class="main-content">
                 <h1>[[template_data.title]]</h1>
                 <h4>[[template_data.description]] </h4>
-                <div class="StationWrapper" v-for="(station,index) in template_data.stations">
+                <div :class="['StationWrapper',station.state]" v-for="(station,index) in template_data.stations">
                     <div class="StationHead">
                         <h5> [[station.Name]] </h5>
                         <h6 v-if="station.Email"> Station Email: [[station.Email]] </h6>
@@ -33,7 +33,7 @@
                         </div>
                         <div class="btn-group" v-if="index==stage">
                             <button class="btn btn-success" @click="submit_approved">Approve</button>
-                            <button class="btn btn-danger" @click="submit_rejected">Reject</button>
+                            <button class="btn btn-danger" @click="submit_rejected" v-if="index!=0">Reject</button>
                         </div>
                     </div>
                 </div>
