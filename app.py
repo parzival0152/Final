@@ -116,7 +116,7 @@ def my_documents():
 @login_required
 def templates(id):
     if(id=="0"):
-        return render_template("templateMaker2.html")
+        return render_template("templateMaker.html")
     else:
         template = Template.query.get(id)
         return render_template("templateview.html",id = id,viewstats = template.owner.id==current_user.id)
@@ -126,25 +126,13 @@ def templates(id):
 def documents(id):
     if request.method == "GET":
         document = Document.query.get(id)
-        data = json.loads(document.data)
-        return render_template("documentview.html",data = data,stage = document.stage, allowed = document.currentemail == current_user.email)
+        return render_template("documentview.html",id = id, allowed = document.currentemail == current_user.email)
     else: 
         document = Document.query.get(id)
         current_user.past_documents.append(document)
-        document.advance(request.form.to_dict())
+        document.advance(request.json)
         db.session.commit()
         return redirect(url_for("my_documents"))
-
-@app.route('/createTemplate',methods = ['POST'])
-@login_required
-def createtemp():
-    tem1 = Template(
-        owner=current_user,
-        form_response=request.form.to_dict()
-    )
-    db.session.add(tem1)
-    db.session.commit()
-    return redirect(url_for("my_templates"))
 
 @app.route('/CreateDocument/<id>')
 @login_required
@@ -204,6 +192,9 @@ def api_docs_created(user_id):
 def api_templates(Tid):
     return jsonify(Template.query.get(Tid).toJSON())
 
+@app.route('/api/documents/<Did>')
+def api_documents(Did):
+    return jsonify(Document.query.get(Did).toJSON())
 
 @app.route('/api/current_user_id')
 def api_current_user_id():
@@ -212,10 +203,22 @@ def api_current_user_id():
         'id':current_user.id
     })
 
+@app.route("/api/create_template", methods = ['POST'])
+def api_create_template():
+    template_data = request.json
+    tem1 = Template(
+        owner=current_user,
+        form_response=template_data
+    )
+    db.session.add(tem1)
+    db.session.commit()
+    return redirect(url_for("my_templates"))
+
 @app.route("/api/test", methods = ['POST'])
 def apitest():
     with open('test.json','w') as f:
         f.write(json.dumps(request.json))
+    print(request.json["test"])
     return redirect(url_for("home"))
 
 @app.route('/purgedatabase')

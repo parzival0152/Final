@@ -2,7 +2,7 @@ import json
 from typing import Iterator, Tuple
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from Models.functions import parse_response, complition_email_send, fail_email_send
+from Models.functions import complition_email_send, fail_email_send, create_stats
 
 db = SQLAlchemy()
 
@@ -85,7 +85,8 @@ class Template(db.Model):
     def __init__(self,owner:User,form_response) -> None:
         self.name = form_response["title"]
         self.description = form_response["description"]
-        self.data, self.stats = parse_response(form_response)
+        self.data = json.dumps(form_response)
+        self.stats = create_stats(form_response)
         self.owner_id = owner.id
     
     def __repr__(self) -> str:
@@ -98,7 +99,6 @@ class Template(db.Model):
             "creator":self.owner.fullname,
             "Tid":self.Tid,
             "href":f"/templates/{self.Tid}"
-
         }
     
     def toJSON(self):
@@ -114,7 +114,7 @@ class Template(db.Model):
     def instanciate(self,current_user):
         stats = json.loads(self.stats)
         stats["created"] += 1
-        stats["0"] += 1
+        stats["Stage #0"] += 1
         self.stats = json.dumps(stats)
         data = json.loads(self.data)
         data["stations"][0]["Email"] = current_user.email
@@ -161,15 +161,13 @@ class Document(db.Model):
             "stage":self.stage
         }
     
-    def advance(self,formdata):
+    def advance(self,response_data):
         data = json.loads(self.data)
-        stage = int(formdata.pop("stage"))
-        choice = formdata.pop("choice")
+        stage = self.stage
+        choice = response_data['choice']
 
-        stationdata = data["stations"][stage]["fields"]
-        for index,value in formdata.items():
-            stationdata[int(index)]["value"] = value
-        data["stations"][stage]["fields"] = stationdata
+        data = response_data["data"]
+
         nextemail = ""
         completed = False
         try:
@@ -179,9 +177,9 @@ class Document(db.Model):
 
         origintemplate = self.master_template
         stats = json.loads(origintemplate.stats)
-        stats[str(stage)] -= 1
+        stats[f"Stage #{stage}"] -= 1
         
-        if choice == "Deny":
+        if choice == "reject":
             stats["failed"]+=1
             nextemail = ""
             fail_email_send(self.owner)
@@ -190,7 +188,7 @@ class Document(db.Model):
                 stats["completed"]+=1
                 complition_email_send(self.owner)
             else:
-                stats[str(stage+1)] += 1
+                stats[f"Stage #{stage+1}"] += 1
             
 
         self.data = json.dumps(data)

@@ -11,7 +11,7 @@ const app = new Vue({
     },
     async created(){
         this.id = window.id;
-        this.stats_show = window.stats_show
+        this.stats_show = window.stats_show == "True"
         let response = await fetch('/api/templates/'+this.id);
         let data = await response.json()
         this.template_data = data.data

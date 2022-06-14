@@ -2,52 +2,44 @@
 
 {% block head %}
 <title>Document viewer</title>
-<style>
-    .main-content {
-        text-align: center;
-        position: relative;
-        margin-top: 2%;
-    }
-</style>
-
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/templates.css') }}">
+<script>
+    window.id = '{{id}}'
+    window.allowed = '{{allowed}}'
+</script>
 {% endblock %}
 
 {% block body %}
-<div class="template-home">
-    <div class="form-wrapper round-corners">
-        <div class="main-content">
-            <form action="" method="post">
-                <h1>{{data["title"]}}</h1>
-                <h4>{{data["description"]}}</h4>
-                {% for station in data["stations"] %}
-                {% set StationIndex = loop.index0 %}
-                <div class="StationWrapper">
-                    <div class="StationHead" style="color:hotpink">
-                        <button type="button" id="StationHeadButton{{StationIndex}}" class="btn btn-primary"> {{station["Name"]}}</button>
-                        {{station["Email"]}}
+<div id="app">
+    <div class="template-home">
+        <div class="form-wrapper round-corners">
+            <div class="main-content">
+                <h1>[[template_data.title]]</h1>
+                <h4>[[template_data.description]] </h4>
+                <div class="StationWrapper" v-for="(station,index) in template_data.stations">
+                    <div class="StationHead">
+                        <h5> [[station.Name]] </h5>
+                        <h6 v-if="station.Email"> Station Email: [[station.Email]] </h6>
                     </div>
-                    <div class="StationBody" id="StationBody{{StationIndex}}">
-                        {% for field in station["fields"] %}
-                        {% if field["type"] == "text" %}
-                        <p class="text">{{field["value"]}}</p>
-                        {% elif "input" in field["type"] %}
-                        <div class="form-floating">
-                            <input type="text" maxlength="100" placeholder="Template Title" name="{{loop.index0}}"
-                                class="form-control" value="{{field['value']}}" disabled>
-                            <label for="title">{{field["prompt"]}}</label>
+                    <div class="StationBody">
+                        <div class="field-wrapper my-2 p-2 d-flex justify-content-center round-corners" v-for="field in station.fields">
+                            <p v-if="field.type == 'text'">
+                                [[field.value]]
+                            </p>
+                            <div class="w-75" v-if="field.type == 'input'">
+                                <label>[[field.prompt]]</label>
+                                <input type="text" v-model="field.value" class="form-control" :disabled="index!=stage">
+                            </div>
                         </div>
-                        {% endif %}
-                        {% endfor %}
+                        <div class="btn-group" v-if="index==stage">
+                            <button class="btn btn-success" @click="submit_approved">Approve</button>
+                            <button class="btn btn-danger" @click="submit_rejected">Reject</button>
+                        </div>
                     </div>
                 </div>
-                {% endfor %}
-                <input style="display: none;" id="stage" name="stage" value="{{stage}}">
-            </form>
+            </div>
         </div>
     </div>
 </div>
-<span id="allowed" style="display: none;">{{allowed}}</span>
-<script src="{{url_for('static', filename='scripts/animateStations.js') }}"></script>
-<script src="{{url_for('static', filename='scripts/documentAliver.js') }}"></script>
+<script src="{{url_for('static', filename='scripts/docsViewVue.js') }}"></script>
 {% endblock %}

@@ -9,6 +9,7 @@ const app = new Vue({
             description:"",
             stations:[
                 {
+                    state:"",
                     Name:"",
                     fields:[]
                 }
@@ -21,8 +22,21 @@ const app = new Vue({
         
     },
     methods: {
-        create_template(){
-            postData('/api/test',this.template_data)
+        async create_template(){
+            //TODO: data validation
+
+
+
+
+
+            //actually create the template
+            let res = await postData('/api/create_template',this.template_data)
+            if (res.status==200){
+                window.location.href = res.url
+            }
+            else{
+                //TODO: make sure things dont break if server is unable to respond
+            }
         },
         add_station(){
             this.template_data.stations.push({
