@@ -30,10 +30,16 @@
                                 <label>[[field.prompt]]</label>
                                 <input type="text" v-model="field.value" class="form-control" :disabled="index!=stage">
                             </div>
+                            <div class="w-75" v-if="field.type == 'radio'">
+                                <div class="border" v-for="option in field.options">
+                                    <input type="radio" :id="option" :value="option" v-model="field.chosen" :disabled="index!=stage">
+                                    <label class="mx-3">[[option]]</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="btn-group" v-if="index==stage">
-                            <button class="btn btn-success" @click="submit_approved">Approve</button>
-                            <button class="btn btn-danger" @click="submit_rejected" v-if="index!=0">Reject</button>
+                            <button class="btn btn-success" @click="submit('approved')">Approve</button>
+                            <button class="btn btn-danger" @click="submit('rejected')" v-if="index!=0">Reject</button>
                         </div>
                     </div>
                 </div>

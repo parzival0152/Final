@@ -48,10 +48,24 @@
                         <label>Enter a prompt for the user</label>
                         <input type="text" v-model="field.prompt" class="form-control" value="" placeholder="User Prompt" required>
                     </div>
+                    <div class="w-75" v-if="field.type == 'radio'">
+                        <div class="border" v-for="(option,index) in field.options">
+                            <input type="radio" :id="option" :value="option" v-model="field.chosen" disabled>
+                            <label class="mx-3">[[option]]</label>
+                            <button class="btn btn-danger btn-sm" @click="remove_from_field(field,index)">-</button>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="text" v-model="field.held" placeholder="Add to radio options" class="form-control"  @keypress.enter="add_to_field(field)">
+                            <div class="input-group-append">
+                              <button class="btn btn-success" @click="add_to_field(field)">+</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="btn-group mt-2">
                     <button class="btn btn-primary" @click="add_input_to_station(station)">Add Input</button>
                     <button class="btn btn-primary" @click="add_text_to_station(station)">Add Text</button>
+                    <button class="btn btn-primary" @click="add_radio_to_station(station)">Add Radio</button>
                 </div>
             </div>
         </div>

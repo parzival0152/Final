@@ -1,4 +1,4 @@
-
+/// <reference path="index.js" />
 
 const app = new Vue({
     el: '#app',
@@ -23,43 +23,24 @@ const app = new Vue({
         }
     },
     methods: {
-        async submit_approved() {
-            let isValid = this.data_validate()
-
-            if (isValid) {
-                let res = await postData('/documents/'+this.id, {
-                    choice:"approve",
-                    data:this.template_data
-                })
-                if (res.status == 200) {
-                    window.location.href = res.url
-                }
-                else {
-                    //TODO: make sure things dont break if server is unable to respond
-                }
+        async submit(choise) {
+            let isValid = checkValidityDocument(this.template_data,this.stage)
+            if(!isValid){
+                console.log("it is invalid")
+                return false
             }
 
-        },
-        async submit_rejected() {
-            let isValid = this.data_validate()
-
-            if (isValid) {
-                let res = await postData('/documents/'+this.id, {
-                    choice:"reject",
-                    data:this.template_data
-                })
-                if (res.status == 200) {
-                    window.location.href = res.url
-                }
-                else {
-                    //TODO: make sure things dont break if server is unable to respond
-                }
+            let res = await postData('/documents/'+this.id, {
+                choice:choise,
+                data:this.template_data
+            })
+            if (res.status == 200) {
+                // window.location.href = res.url
             }
-        },
-        data_validate() {
-            //TODO: add data validation here too
+            else {
+                //TODO: make sure things dont break if server is unable to respond
+            }
 
-            return true
         }
     }
 })
