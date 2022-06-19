@@ -73,6 +73,15 @@ const app = new Vue({
                 held: ''
             })
         },
+        add_checkbox_to_station(station) {
+            station.fields.push({
+                type: "checkbox",
+                options: [],
+                prompt:"",
+                chosen: [],
+                held: ''
+            })
+        },
         add_to_field(field) {
             if(field.held == ''){
                 return false

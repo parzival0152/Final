@@ -66,12 +66,27 @@ function checkValidityTemplate(data) {
 
             //validate radio
             if (field.type == 'radio') {
+                if (field.prompt.length == 0) {
+                    warnings.push(`Station #${index}: Radio prompt can't be empty`)
+
+                }
                 if (field.options.length <= 1) {
                     warnings.push(`Station #${index}: Radio must have at-least two (2) options`);
 
                 }
             }
 
+            //validate checkbox
+            if (field.type == 'checkbox') {
+                if (field.prompt.length == 0) {
+                    warnings.push(`Station #${index}: Checkbox prompt can't be empty`)
+
+                }
+                if (field.options.length == 0) {
+                    warnings.push(`Station #${index}: Checkbox must have at-least one (1) option`);
+
+                }
+            }
         })
 
     });
@@ -104,6 +119,12 @@ function checkValidityDocument(data, stage) {
             }
         }
 
+        if (field.type == 'checkbox') {
+            if (field.chosen.length == 0) {
+                warnings.push("You must choose at-least one option in the checkbox")
+
+            }
+        }
     })
     return warnings
 }

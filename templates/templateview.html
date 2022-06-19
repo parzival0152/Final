@@ -37,6 +37,13 @@
                                     <label class="mx-3">[[option]]</label>
                                 </div>
                             </div>
+                            <div class="w-75" v-if="field.type == 'checkbox'">
+                                <label>[[field.prompt]]</label>
+                                <div class="border" v-for="(option,index) in field.options">
+                                    <input type="checkbox" :id="option" :value="option" v-model="field.chosen" disabled>
+                                    <label class="mx-3">[[option]]</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
