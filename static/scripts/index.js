@@ -102,7 +102,6 @@ function checkValidityDocument(data, stage) {
     let station = data.stations[stage]
 
     station.fields.forEach(field => {
-        //TODO: squash this bug`
         //validate input
         if (field.type == "input") {
             if (field.value.length == 0) {

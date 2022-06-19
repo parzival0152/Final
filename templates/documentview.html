@@ -13,7 +13,10 @@
 <div id="app">
     <div class="template-home">
         <div class="form-wrapper round-corners">
-            <div class="alert alert-danger" v-if="warnings.length!=0">
+            <div class="alert alert-danger d-flex" v-if="warnings.length!=0">
+                <button type="button" class="close bg-light" @click="warnings=[]">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 <ul>
                     <li v-for="warning in warnings">
                         [[warning]]

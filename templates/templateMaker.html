@@ -11,7 +11,10 @@
         <div class="top-left">
             <button class="btn btn-success" @click="create_template">Create Template</button>
         </div>
-        <div class="alert alert-danger" v-if="warnings.length!=0">
+        <div class="alert alert-danger d-flex" v-if="warnings.length!=0">
+            <button type="button" class="close bg-light" @click="warnings=[]">
+                <span aria-hidden="true">&times;</span>
+              </button>
             <ul>
                 <li v-for="warning in warnings">
                     [[warning]]

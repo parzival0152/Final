@@ -142,3 +142,13 @@ hr{
 .dropdown:hover .dropbtn {background-color: #048858;}
 
 .submitbtn:hover {background-color: #048858;}
+
+.close {
+    position: relative;
+    opacity: 55%;
+    border: none;
+    left: 95%;
+    height: 25px;
+    width: 25px;
+    border-radius: 25px;
+}
