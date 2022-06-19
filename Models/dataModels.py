@@ -178,7 +178,7 @@ class Document(db.Model):
         stats = json.loads(origintemplate.stats)
         stats[f"Stage #{stage}"] -= 1
         
-        if choice == "reject":
+        if choice == "rejected":
             stats["failed"]+=1
             nextemail = ""
             data['stations'][stage]['state'] = 'border-danger'

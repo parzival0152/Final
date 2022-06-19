@@ -4,6 +4,7 @@ const app = new Vue({
     el: '#app',
     delimiters: ['[[', ']]'],
     data: {
+        warnings:[],
         allowed: false,
         stage: -1,
         template_data: {}
@@ -24,9 +25,11 @@ const app = new Vue({
     },
     methods: {
         async submit(choise) {
-            let isValid = checkValidityDocument(this.template_data,this.stage)
-            if(!isValid){
-                console.log("it is invalid")
+            //get list of warnings from validity check
+            this.warnings = checkValidityDocument(this.template_data,this.stage)
+
+            //if there exist warnings return and dont continue
+            if (this.warnings.length != 0) {
                 return false
             }
 
@@ -35,7 +38,7 @@ const app = new Vue({
                 data:this.template_data
             })
             if (res.status == 200) {
-                // window.location.href = res.url
+                window.location.href = res.url
             }
             else {
                 //TODO: make sure things dont break if server is unable to respond

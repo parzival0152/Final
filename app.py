@@ -218,7 +218,6 @@ def api_create_template():
 def apitest():
     with open('test.json','w') as f:
         f.write(json.dumps(request.json))
-    print(request.json["test"])
     return redirect(url_for("home"))
 
 @app.route('/purgedatabase')

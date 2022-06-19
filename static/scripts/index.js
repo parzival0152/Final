@@ -12,16 +12,17 @@ async function postData(url, data) {
 }
 
 function checkValidityTemplate(data) {
+    let warnings = []
+
     //check that title isn't empty
     if (data.title.length == 0) {
-        alert("Template title can't be empty")
-        return false
+        warnings.push("Template title can't be empty")
     }
 
     //check that description isn't empty
     if (data.description.length == 0) {
-        alert("Template description can't be empty")
-        return false
+        warnings.push("Template description can't be empty")
+
     }
 
     //check stations validity
@@ -29,20 +30,20 @@ function checkValidityTemplate(data) {
 
         //chech that station name isn't empty
         if (station.Name.length == 0) {
-            alert("Station name can't be empty")
-            return false
+            warnings.push(`Station #${index} name can't be empty`)
+
         }
 
         //check that station email isn't empty
         if (station.Email.length == 0 && index != 0) {
-            alert("Station email can't be empty")
-            return false
+            warnings.push(`Station #${index} email can't be empty`)
+
         }
 
         //check that station has some fields
-        if(station.fields.length == 0){
-            alert("Station must have at-least one (1) field")
-            return false
+        if (station.fields.length == 0) {
+            warnings.push(`Station #${index} must have at-least one (1) field`)
+
         }
 
         station.fields.forEach(field => {
@@ -50,58 +51,60 @@ function checkValidityTemplate(data) {
             //validate text
             if (field.type == "text") {
                 if (field.value.length == 0) {
-                    alert("Textual input can't be empty")
-                    return false
+                    warnings.push(`Station #${index}: Textual input can't be empty`)
+
                 }
             }
 
             //validate input
             if (field.type == "input") {
                 if (field.prompt.length == 0) {
-                    alert("Input can't be empty");
-                    console.log("done with alert")
-                    return false
+                    warnings.push(`Station #${index}: Input can't be empty`)
+
                 }
             }
 
             //validate radio
-            if(field.type == 'radio'){
-                if (field.options.length == 0) {
-                    alert("Radio must have at-least one (1) option");
-                    return false
+            if (field.type == 'radio') {
+                if (field.options.length <= 1) {
+                    warnings.push(`Station #${index}: Radio must have at-least two (2) options`);
+
                 }
             }
 
         })
 
     });
-    return true
+    return warnings
 }
 
 
 function checkValidityDocument(data, stage) {
 
+    let warnings = []
+
     //check stations validity
-    station = data.stations[stage]
+    let station = data.stations[stage]
 
     station.fields.forEach(field => {
-        //TODO: squash this bug
+        //TODO: squash this bug`
         //validate input
         if (field.type == "input") {
             if (field.value.length == 0) {
-                alert("Input can't be empty")
-                return false
+                warnings.push("Input can't be empty")
+
             }
         }
 
         //validate radio
-        if(field.type == 'radio'){
-            if (field.choosen == '') {
-                alert("You must choose and option in the radio")
-                return false
+        if (field.type == 'radio') {
+            if (field.chosen == '') {
+                warnings.push("You must choose an option in the radio")
+
             }
         }
 
     })
-    return true
+    return warnings
 }
+

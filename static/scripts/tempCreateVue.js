@@ -4,6 +4,7 @@ const app = new Vue({
     el: '#app',
     delimiters: ['[[', ']]'],
     data: {
+        warnings : [],
         template_data: {
             title: "",
             description: "",
@@ -24,11 +25,14 @@ const app = new Vue({
     },
     methods: {
         async create_template() {
-
-            let isValid = checkValidityTemplate(this.template_data)
-            if (!isValid) {
+            //get list of warnings from validity check
+            this.warnings = checkValidityTemplate(this.template_data)
+            
+            //if there exist warnings return and dont continue
+            if (this.warnings.length != 0) {
                 return false
             }
+            console.log("here")
 
             //actually create the template
             let res = await postData('/api/create_template', this.template_data)
@@ -64,7 +68,8 @@ const app = new Vue({
             station.fields.push({
                 type: "radio",
                 options: [],
-                choosen: '',
+                prompt:"",
+                chosen: '',
                 held: ''
             })
         },

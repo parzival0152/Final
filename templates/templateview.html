@@ -31,6 +31,7 @@
                                 <input type="text" v-model="field.value" class="form-control" disabled>
                             </div>
                             <div class="w-75" v-if="field.type == 'radio'">
+                                <label>[[field.prompt]]</label>
                                 <div class="border" v-for="(option,index) in field.options">
                                     <input type="radio" :id="option" :value="option" v-model="field.chosen" disabled>
                                     <label class="mx-3">[[option]]</label>
