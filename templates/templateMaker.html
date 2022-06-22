@@ -8,13 +8,13 @@
 {%block body%}
 <div id="app">
     <div class="form-wrapper round-corners mt-5 p-4">
-        <div class="top-left">
+        <div class="top-right">
             <button class="btn btn-success" @click="create_template">Create Template</button>
         </div>
         <div class="alert alert-danger d-flex" v-if="warnings.length!=0">
             <button type="button" class="close bg-light" @click="warnings=[]">
                 <span aria-hidden="true">&times;</span>
-              </button>
+            </button>
             <ul>
                 <li v-for="warning in warnings">
                     [[warning]]
@@ -34,15 +34,18 @@
                     <input type="text" v-model="template_data.description" class="form-control" placeholder="Template description" value="" required>
                 </div>
             </div>
-            <div class="StationWrapper" v-for="(station,index) in template_data.stations">
+            <div class="StationWrapper" v-for="(station,station_index) in template_data.stations">
                 <div class="StationHead">
+                    <!-- <button v-if="station_index!==0" type="button" class="close btn--remove btn-danger" @click="remove_station(station_index)" style="left: 85%;">
+                        <span aria-hidden="true">&times;</span>
+                    </button> -->
                     <div class="d-flex justify-content-center">
                         <div class="w-75">
                             <label>Enter a name for the Section</label>
                             <input type="text" v-model="station.Name" class="form-control" placeholder="Section name" value="" required>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-center" v-if="index!==0">
+                    <div class="d-flex justify-content-center" v-if="station_index!==0">
                         <div class="w-75">
                             <label>Enter an Email for the Section</label>
                             <input type="email" v-model="station.Email" class="form-control" placeholder="Section email" value="" required>
@@ -50,7 +53,10 @@
                     </div>
                 </div>
                 <div class="StationBody">
-                    <div class="field-wrapper my-2 p-2 d-flex justify-content-center round-corners" v-for="field in station.fields">
+                    <div class="field-wrapper my-2 p-2 d-flex justify-content-center round-corners" v-for="(field,field_index) in station.fields">
+                        <button type="button" class="close btn--remove btn-danger" @click="remove_field_from_station(station,field_index)" style="left: 85%;">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                         <div class="w-75" v-if="field.type == 'text'">
                             <label>Enter the text you with to be displayed to the user</label>
                             <textarea class="form-control" v-model="field.value" value="" placeholder="Text here" required></textarea>
@@ -65,7 +71,7 @@
                             <div class="border" v-for="(option,index) in field.options">
                                 <input type="radio" :id="option" :value="option" v-model="field.chosen" disabled>
                                 <label class="mx-3">[[option]]</label>
-                                <button class="btn btn-danger btn-sm" @click="remove_from_field(field,index)">-</button>
+                                <button class="btn btn-danger btn-sm btn--remove" @click="remove_from_field(field,index)">-</button>
                             </div>
                             <div class="input-group mb-3">
                                 <input type="text" v-model="field.held" placeholder="Add to radio options" class="form-control"  @keypress.enter="add_to_field(field)">
@@ -80,7 +86,7 @@
                             <div class="border" v-for="(option,index) in field.options">
                                 <input type="checkbox" :id="option" :value="option" v-model="field.chosen" disabled>
                                 <label class="mx-3">[[option]]</label>
-                                <button class="btn btn-danger btn-sm" @click="remove_from_field(field,index)">-</button>
+                                <button class="btn btn-danger btn-sm btn--remove" @click="remove_from_field(field,index)">-</button>
                             </div>
                             <div class="input-group mb-3">
                                 <input type="text" v-model="field.held" placeholder="Add to checkbox options" class="form-control"  @keypress.enter="add_to_field(field)">
@@ -93,8 +99,8 @@
                     <div class="btn-group mt-2">
                         <button class="btn btn-primary" @click="add_input_to_station(station)">Add Input</button>
                         <button class="btn btn-primary" @click="add_text_to_station(station)">Add Text</button>
-                        <button class="btn btn-primary" @click="add_radio_to_station(station)">Add Radio</button>
-                        <button class="btn btn-primary" @click="add_checkbox_to_station(station)">Add Checkbox</button>
+                        <button class="btn btn-primary" @click="add_radio_to_station(station)">Add Multiple Choice</button>
+                        <button class="btn btn-primary" @click="add_checkbox_to_station(station)">Add Checkboxes</button>
                     </div>
                 </div>
             </div>

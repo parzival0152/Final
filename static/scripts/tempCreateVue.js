@@ -91,6 +91,12 @@ const app = new Vue({
         },
         remove_from_field(field, index) {
             field.options.splice(index, 1)
+        },
+        remove_field_from_station(station,field_index){
+            station.fields.splice(field_index,1)
+        },
+        remove_station(station_index){
+            template_data.stations.splice(station_index,1)
         }
     }
 })
