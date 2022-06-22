@@ -38,14 +38,14 @@
                 <div class="StationHead">
                     <div class="d-flex justify-content-center">
                         <div class="w-75">
-                            <label>Enter a name for the station</label>
-                            <input type="text" v-model="station.Name" class="form-control" placeholder="Station name" value="" required>
+                            <label>Enter a name for the Section</label>
+                            <input type="text" v-model="station.Name" class="form-control" placeholder="Section name" value="" required>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center" v-if="index!==0">
                         <div class="w-75">
-                            <label>Enter an Email for the station</label>
-                            <input type="email" v-model="station.Email" class="form-control" placeholder="Station email" value="" required>
+                            <label>Enter an Email for the Section</label>
+                            <input type="email" v-model="station.Email" class="form-control" placeholder="Section email" value="" required>
                         </div>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" @click="add_station">Add Station</button>
+        <button type="button" class="btn btn-primary" @click="add_station">Add Section</button>
     </div>
 </div>
 

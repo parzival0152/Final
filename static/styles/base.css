@@ -87,14 +87,28 @@ hr{
 .top-left {
 	position: absolute;
 	top: 10%;
-	left: 85%;
+	left: 6%;
+	display: inline-block;
+}
+
+.top-right {
+	position: absolute;
+	top: 10%;
+	left: 90%;
+	display: inline-block;
+}
+
+.buttom-left {
+	position: absolute;
+	top: 10%;
+	left: 90%;
 	display: inline-block;
 }
 
 .buttom-right {
 	position: absolute;
 	top: 90%;
-	left: 85%;
+	left: 90%;
 	display: inline-block;
 }
 

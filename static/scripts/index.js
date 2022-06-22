@@ -20,29 +20,29 @@ function checkValidityTemplate(data) {
     }
 
     //check that description isn't empty
-    if (data.description.length == 0) {
-        warnings.push("Template description can't be empty")
-
-    }
+    // if (data.description.length == 0) {
+    //     warnings.push("Template description can't be empty")
+    
+    // } //removed by suggestion
 
     //check stations validity
     data.stations.forEach((station, index) => {
 
         //chech that station name isn't empty
         if (station.Name.length == 0) {
-            warnings.push(`Station #${index} name can't be empty`)
+            warnings.push(`Section #${index} name can't be empty`)
 
         }
 
         //check that station email isn't empty
         if (station.Email.length == 0 && index != 0) {
-            warnings.push(`Station #${index} email can't be empty`)
+            warnings.push(`Section #${index} email can't be empty`)
 
         }
 
         //check that station has some fields
         if (station.fields.length == 0) {
-            warnings.push(`Station #${index} must have at-least one (1) field`)
+            warnings.push(`Section #${index} must have at-least one (1) field`)
 
         }
 
@@ -51,7 +51,7 @@ function checkValidityTemplate(data) {
             //validate text
             if (field.type == "text") {
                 if (field.value.length == 0) {
-                    warnings.push(`Station #${index}: Textual input can't be empty`)
+                    warnings.push(`Section #${index}: Textual input can't be empty`)
 
                 }
             }
@@ -59,7 +59,7 @@ function checkValidityTemplate(data) {
             //validate input
             if (field.type == "input") {
                 if (field.prompt.length == 0) {
-                    warnings.push(`Station #${index}: Input can't be empty`)
+                    warnings.push(`Section #${index}: Input can't be empty`)
 
                 }
             }
@@ -67,11 +67,11 @@ function checkValidityTemplate(data) {
             //validate radio
             if (field.type == 'radio') {
                 if (field.prompt.length == 0) {
-                    warnings.push(`Station #${index}: Radio prompt can't be empty`)
+                    warnings.push(`Section #${index}: Radio prompt can't be empty`)
 
                 }
                 if (field.options.length <= 1) {
-                    warnings.push(`Station #${index}: Radio must have at-least two (2) options`);
+                    warnings.push(`Section #${index}: Radio must have at-least two (2) options`);
 
                 }
             }
@@ -79,11 +79,11 @@ function checkValidityTemplate(data) {
             //validate checkbox
             if (field.type == 'checkbox') {
                 if (field.prompt.length == 0) {
-                    warnings.push(`Station #${index}: Checkbox prompt can't be empty`)
+                    warnings.push(`Section #${index}: Checkbox prompt can't be empty`)
 
                 }
                 if (field.options.length == 0) {
-                    warnings.push(`Station #${index}: Checkbox must have at-least one (1) option`);
+                    warnings.push(`Section #${index}: Checkbox must have at-least one (1) option`);
 
                 }
             }

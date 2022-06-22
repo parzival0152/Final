@@ -29,7 +29,7 @@
                 <div :class="['StationWrapper',station.state]" v-for="(station,index) in template_data.stations">
                     <div class="StationHead">
                         <h5> [[station.Name]] </h5>
-                        <h6 v-if="station.Email"> Station Email: [[station.Email]] </h6>
+                        <h6 v-if="station.Email"> Section Email: [[station.Email]] </h6>
                     </div>
                     <div class="StationBody">
                         <div class="field-wrapper my-2 p-2 d-flex justify-content-center round-corners" v-for="field in station.fields">
