@@ -85,28 +85,28 @@ hr{
 
 /* The container <div> - needed to position the dropdown content */
 .top-left {
-	position: absolute;
+	position: relative;
 	top: 10%;
 	left: 6%;
 	display: inline-block;
 }
 
 .top-right {
-	position: absolute;
+	position: relative;
 	top: 10%;
 	left: 90%;
 	display: inline-block;
 }
 
 .buttom-left {
-	position: absolute;
+	position: relative;
 	top: 10%;
 	left: 90%;
 	display: inline-block;
 }
 
 .buttom-right {
-	position: absolute;
+	position: relative;
 	top: 90%;
 	left: 90%;
 	display: inline-block;
