@@ -7,10 +7,10 @@
 
 {%block body%}
 <div id="app">
-    <div class="form-wrapper round-corners mt-5 p-4">
-        <div class="top-right">
-            <button class="btn btn-success" @click="create_template">Create Template</button>
-        </div>
+    <div class="top-right sticky mt-2">
+        <button class="btn btn-success" @click="create_template">Create Template</button>
+    </div>
+    <div class="form-wrapper round-corners mt-3 p-4">
         <div class="alert alert-danger d-flex" v-if="warnings.length!=0">
             <button type="button" class="close bg-light" @click="warnings=[]">
                 <span aria-hidden="true">&times;</span>
@@ -105,7 +105,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" class="btn btn-primary" @click="add_station">Add Section</button>
+        <button type="button" class="btn btn-primary bottom-middle" @click="add_station">Add Section</button>
     </div>
 </div>
 

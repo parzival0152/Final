@@ -94,7 +94,7 @@ hr{
 .top-right {
 	position: relative;
 	top: 10%;
-	left: 90%;
+	left: 85%;
 	display: inline-block;
 }
 
@@ -110,6 +110,17 @@ hr{
 	top: 90%;
 	left: 90%;
 	display: inline-block;
+}
+
+.bottom-middle {
+	position: relative;
+	top: 90%;
+	left:45%;
+	display: inline-block;
+}
+
+.sticky {
+	position: sticky;
 }
 
 /* Dropdown Content (Hidden by Default) */
