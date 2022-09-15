@@ -24,7 +24,7 @@
 3. Setting up the virtual enviroment.
     1. If you dont have virtualenv install install it now using ```pip install virtualenv```.
     2. Create a Venv using ```virtualenv {name}```.
-    3. Activate the enviroment using ```.\{name}\Scripts\activate```.
+    3. Activate the enviroment using ```.\{name}\Scripts\activate``` on windows and run ```source .\{name}\Scripts\activate``` on linux.
     4. Run ```pip install -r requirements.txt``` to install all the dependent python libraries.
     5. To close the venv use ```deactivate```.
 4. To run the app use ```flask run``` and go to ```localhost:5000``` to find the home page.

@@ -4,13 +4,14 @@ from email.mime.text import MIMEText
 from os import environ
 from dotenv import load_dotenv
 
+# load setting from the file called .env to the enviroment variables
 load_dotenv()
 
 #The mail addresses and password
 SENDER_ADDRESS = environ['SENDER_ADDRESS']
 SENDER_PASS = environ['SENDER_PASS']
 
-def send_email(receiver_address:str , msg:str, subject:str = 'Schedualed update about your pending documents') -> None:
+def send_email(receiver_address:str , msg:str, subject:str = 'Schedualed update about your pending documents'):
     #Setup the MIME
     message = MIMEMultipart()
     message['From'] = SENDER_ADDRESS

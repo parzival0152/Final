@@ -41,7 +41,9 @@ const app = new Vue({
                 window.location.href = res.url
             }
             else {
-                //TODO: make sure things dont break if server is unable to respond
+                this.warnings = ["An error has occured, trying to submit again"]
+                await new Promise(r => setTimeout(r, 1000)); //sleep for 1 second
+                submit(choise)
             }
 
         }

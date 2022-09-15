@@ -11,7 +11,7 @@ def create_stats(template_data):
     return json.dumps(stats)
 
 
-def complition_email_send(user) -> None:
+def complition_email_send(user):
     username = user.fullname
     email = user.email
     subject = 'An update about one of your documents'
@@ -21,7 +21,7 @@ def complition_email_send(user) -> None:
     '''
     send_email(email,msg,subject)
 
-def fail_email_send(user) -> None:
+def fail_email_send(user):
     username = user.fullname
     email = user.email
     subject = 'An update about one of your documents'

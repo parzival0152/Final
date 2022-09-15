@@ -150,8 +150,8 @@ def signout():
     return redirect(url_for("index"))
 
 # json endpoint start here
-# there functions differ from the ones above as these functions return JSON objects rather then HTML
-# thus these are used as and 'api' of sort for clients such as the email subsystem and some front end features.
+# these functions differ from the ones above as these functions return JSON objects rather then HTML
+# thus these are used as an 'api' of sort for clients such as the email subsystem and some front end features.
 
 @app.route('/api/users')
 def api_users():

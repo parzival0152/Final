@@ -6,21 +6,27 @@ from EmailSubsystem.EmailSender import send_email
 
 
 class user:
-    def __init__(self, **kwargs) -> None:
+    # user class for the managment of reminder emails
+    def __init__(self, **kwargs):
         self.id = kwargs["id"]
         self.name = kwargs["name"]
         self.email = kwargs["email"]
         self.prefered_time = kwargs["preferances"]["alert_time"] # save info from user list
         self.set_timer()
 
-    def set_timer(self, time=None) -> None:
+    def set_timer(self, time=None):
+        # function to set a time for a reminder email
         if time:
+            # if a new timer was given cancel the last job and update the user prefered time
             schedule.cancel_job(self.emailer)
             self.prefered_time = time
         self.emailer = schedule.every().day.at(self.prefered_time).do(self.send_email)
+        # create a new job every day at the prefered time to send an email 
 
-    def send_email(self) -> None:
+    def send_email(self):
+        # function to send an email
         try:
+            # attempt to get the pending document count of the user and if its non-zero, send an email
             r = get(f"http://127.0.0.1:5000/api/docs_count/{self.id}")
             if r.status_code == 200:
                 count = r.json()["count"]
@@ -29,6 +35,7 @@ class user:
                     msg = f"Hello {self.name} \nYou have {count} pending document{'s' if count>1 else ''}"
                     send_email(self.email,msg)
         except ConnectionError:
+            # dont fail if the server fails to respond
             pass
 
 
@@ -51,7 +58,7 @@ class Email_Schedualer:
             if not new_user_info["preferances"]["alert_time"] == specified_user.prefered_time: # if the prefered time has been changed
                 specified_user.set_timer(new_user_info["preferances"]["alert_time"]) # update the timer
 
-    def run(self) -> None:
+    def run(self):
         print("Starting EmailSchedualer system")
         userlist = self.get_users()  # get list of user information from the server
         self.userlist = {u["id"]:user(**u) for u in userlist} # create user handler dict with the keys being the user id
